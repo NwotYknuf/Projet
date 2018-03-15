@@ -44,9 +44,8 @@ int main() {
 	TraitementGraphe traitement(&graph);
 
 	traitement.NumeroteGraphe();
-
-	cout << graph << endl;
-	//heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+	traitement.pccDijkstra(s1);
+	cout << graph.lSommets << endl;
 	system("pause");
 
 	return 0;

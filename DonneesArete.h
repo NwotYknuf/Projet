@@ -5,8 +5,8 @@ using namespace std;
 
 class DonneesArete{
 public:
-	double distance;
-	double duree;
+	unsigned distance;
+	unsigned duree;
 
 	DonneesArete() { distance = 0; duree = 0; }
 	~DonneesArete() { };

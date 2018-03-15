@@ -76,14 +76,60 @@ void TraitementGraphe::NumeroteGraphe(){
 	}
 }
 
-void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
-	Sommet<DonneesSommet> * s = depart;
-	bool fin = false;
-	s->info.lambda = 0;
+void TraitementGraphe::libererToutSommet() {
+
 	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
 
 	while (temp != NULL) {
+		temp->valeur->info.etat = DonneesSommet::LIBRE;
+		temp->valeur->info.pere = NULL;
+		temp->valeur->info.cout = 1000000;
 		temp = temp->suivant;
 	}
+}
+
+void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
+
+		libererToutSommet();
+
+		Maillon<Sommet<DonneesSommet>> *ouverts = NULL;
+
+		depart->info.cout = 0;
+		depart->info.etat = DonneesSommet::OUVERT;
+		ouverts = new Maillon<Sommet<DonneesSommet>>(depart, ouverts);
+		
+		while (ouverts != NULL) {
+			Sommet<DonneesSommet> * s = Maillon<Sommet<DonneesSommet>>::depiler(ouverts);
+			s->info.etat = DonneesSommet::FERME;
+
+			Maillon<Sommet<DonneesSommet>> * voisins = graphe->sommetsAdjacents(s);
+			Maillon<Sommet<DonneesSommet>> * temp2 = voisins;
+
+			while (temp2 != NULL) {
+				Sommet<DonneesSommet> * v = temp2->valeur;
+
+				if (v->info.etat = DonneesSommet::LIBRE) {
+					v->info.pere = s;
+					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
+					v->info.cout = s->info.cout + coutSversV;
+					v->info.etat = DonneesSommet::OUVERT;
+					ouverts = new Maillon<Sommet<DonneesSommet>>(v, ouverts);
+				}
+				else {
+					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
+					if (
+						v->info.etat == DonneesSommet::OUVERT &&
+						s->info.cout < coutSversV + v->info.cout) {
+						v->info.pere = s;
+						v->info.cout = s->info.cout + coutSversV;
+						Maillon<Sommet<DonneesSommet>>::retire(v, ouverts);
+						ouverts = new Maillon<Sommet<DonneesSommet>>(v, ouverts);
+					}
+				}
+				temp2 = temp2->suivant;
+			}
+
+			Maillon<Sommet<DonneesSommet>>::effacePointeurs(voisins);
+		}
 
 }
