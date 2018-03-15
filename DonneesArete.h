@@ -9,6 +9,7 @@ public:
 	unsigned duree;
 
 	DonneesArete() { distance = 0; duree = 0; }
+	DonneesArete(unsigned _distance, unsigned _duree) { distance = _distance; duree = _duree; }
 	~DonneesArete() { };
 
 	friend ostream& operator <<(ostream & os, const DonneesArete & a);

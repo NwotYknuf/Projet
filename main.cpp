@@ -7,9 +7,7 @@ using namespace std;
 int main() {
 
 	Graphe<DonneesArete, DonneesSommet> graph;
-	
-	DonneesSommet d;
-	DonneesArete a;
+	DonneesArete a(1,1);
 
 	Sommet<DonneesSommet> * s12 = graph.creeSommet(DonneesSommet("s12"));
 	Sommet<DonneesSommet> * s11 = graph.creeSommet(DonneesSommet("s11"));
@@ -44,8 +42,7 @@ int main() {
 	TraitementGraphe traitement(&graph);
 
 	traitement.NumeroteGraphe();
-	traitement.pccDijkstra(s1);
-	cout << graph.lSommets << endl;
+	traitement.pccDijkstra(s3);
 	system("pause");
 
 	return 0;

@@ -108,7 +108,8 @@ void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
 			while (temp2 != NULL) {
 				Sommet<DonneesSommet> * v = temp2->valeur;
 
-				if (v->info.etat = DonneesSommet::LIBRE) {
+				if (v->info.etat == DonneesSommet::LIBRE) {
+
 					v->info.pere = s;
 					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
 					v->info.cout = s->info.cout + coutSversV;
@@ -117,9 +118,9 @@ void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
 				}
 				else {
 					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
-					if (
-						v->info.etat == DonneesSommet::OUVERT &&
+					if (v->info.etat == DonneesSommet::OUVERT &&
 						s->info.cout < coutSversV + v->info.cout) {
+
 						v->info.pere = s;
 						v->info.cout = s->info.cout + coutSversV;
 						Maillon<Sommet<DonneesSommet>>::retire(v, ouverts);

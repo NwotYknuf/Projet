@@ -10,7 +10,5 @@ ostream & operator<<(ostream & os, const DonneesSommet & s){
 	os << "-Naturelle : " << s.numerotation << endl;
 	os << "-Prefixe : " << s.numerotationPrefixe << endl;
 	os << "-Sufixe : " << s.numerotationSuffixe << endl;
-	if(s.pere != NULL)
-		os << "Pere : " << *s.pere << endl;
 	return os;
 }
