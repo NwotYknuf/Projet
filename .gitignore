@@ -1,0 +1,10 @@
+
+*.filters
+*.aps
+*.vcxproj
+*.obj
+*.log
+*.idb
+*.pdb
+*.tlog
+*.lastBuildstate
