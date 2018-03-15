@@ -52,9 +52,6 @@ void NumeroteGraphe(Graphe<DonneesArete, DonneesSommet>* graphe) {
 		temp2 = temp2->suivant;
 	}
 
-	Maillon<Sommet<DonneesSommet>>::effacePointeurs(prefixeInverse);
-	Maillon<Sommet<DonneesSommet>>::effacePointeurs(suffixeInverse);
-
 }
 
 
