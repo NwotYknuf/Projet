@@ -10,6 +10,9 @@ public:
 	unsigned int numerotation = 0;
 	unsigned int numerotationPrefixe = 0;
 	unsigned int numerotationSuffixe = 0;
+	unsigned int lambda = 4294967295;
+
+
 
 	DonneesSommet() { }
 	DonneesSommet(const string& _nom) { nom = _nom; }

@@ -34,4 +34,6 @@ public:
 
 	void NumeroteGraphe();
 
+	void pccDijkstra(Sommet<DonneesSommet> * depart);
+
 };

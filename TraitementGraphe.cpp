@@ -1,5 +1,9 @@
 #include "TraitementGraphe.h"
 
+/*
+* traitementPrefixe et traitementSuffixe doivent être des méthodes membres de TraitementGraphe.
+* elles doivent respecter la signature : void maFonction(Sommet<DonneesSommet>*)
+*/
 template<class Traitement>
 void inline TraitementGraphe::parcoursComposante(Sommet<DonneesSommet>* sommet, Traitement traitementPrefixe, Traitement traitementSuffixe) {
 	sommet->marque = true;
@@ -20,6 +24,10 @@ void inline TraitementGraphe::parcoursComposante(Sommet<DonneesSommet>* sommet, 
 	Maillon<Sommet<DonneesSommet>>::effacePointeurs(voisins);
 }
 
+/*
+* traitementPrefixe et traitementSuffixe doivent être des méthodes membres de TraitementGraphe.
+* elles doivent respecter la signature : void maFonction(Sommet<DonneesSommet>*)
+*/
 template<class Traitement>
 void inline TraitementGraphe::parcoursDFS(Traitement traitementPrefixe, Traitement traitementSuffixe) {
 	Maillon<Sommet<DonneesSommet>>* temp = graphe->lSommets;
@@ -53,7 +61,7 @@ void TraitementGraphe::NumeroteGraphe(){
 		temp = temp->suivant;
 	}
 
-	parcoursDFS(&TraitementGraphe::ordrePefixeInverse, &TraitementGraphe::ordreSuffixeInverse);
+	parcoursDFS(	&TraitementGraphe::ordrePefixeInverse, &TraitementGraphe::ordreSuffixeInverse);
 
 	int n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
 	temp = prefixeInverse;
@@ -66,4 +74,16 @@ void TraitementGraphe::NumeroteGraphe(){
 		temp = temp->suivant;
 		temp2 = temp2->suivant;
 	}
+}
+
+void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
+	Sommet<DonneesSommet> * s = depart;
+	bool fin = false;
+	s->info.lambda = 0;
+	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
+
+	while (temp != NULL) {
+		temp = temp->suivant;
+	}
+
 }
