@@ -46,7 +46,7 @@ int main() {
 	traitement.NumeroteGraphe();
 
 	cout << graph << endl;
-	
+	//heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 	system("pause");
 
 	return 0;
