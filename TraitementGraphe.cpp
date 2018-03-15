@@ -1,5 +1,7 @@
 #include "TraitementGraphe.h"
 
+const unsigned TraitementGraphe::INFINIT = 1000000;
+
 /*
 * traitementPrefixe et traitementSuffixe doivent être des méthodes membres de TraitementGraphe.
 * elles doivent respecter la signature : void maFonction(Sommet<DonneesSommet>*)
@@ -84,7 +86,7 @@ void TraitementGraphe::libererToutSommet() {
 	while (temp != NULL) {
 		temp->valeur->info.etat = DonneesSommet::LIBRE;
 		temp->valeur->info.pere = NULL;
-		temp->valeur->info.cout = 1000000;
+		temp->valeur->info.cout = INFINIT;
 		temp = temp->suivant;
 	}
 }
@@ -135,4 +137,90 @@ void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart, unsigned (Don
 			Maillon<Sommet<DonneesSommet>>::effacePointeurs(voisins);
 		}
 
+}
+
+unsigned ** TraitementGraphe::matriceDajdacence(unsigned(DonneesArete::*critere)(void)){
+
+	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
+
+	unsigned** matrice = new unsigned*[n];
+
+	for (int i = 0; i < n; i++)
+		matrice[i] = new unsigned[n];
+
+	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
+	Maillon<Sommet<DonneesSommet>> * temp2 = graphe->lSommets;
+
+	int i =0,j = 0;
+
+	while (temp != NULL) {
+		while (temp2!=NULL){
+
+			Arete<DonneesArete, DonneesSommet> * s = graphe->trouveAreteParSommets(temp->valeur, temp2->valeur);
+
+			if (s != NULL)
+				matrice[i][j] = (s->info.*critere)();
+			else
+				matrice[i][j] = 0;
+
+			temp2 = temp2->suivant;
+			j++;
+		}
+
+		temp2 = graphe->lSommets;
+		temp = temp->suivant;
+		i++;
+		j = 0;
+	}
+	return matrice;
+}
+
+unsigned ** TraitementGraphe::FloydWarshall(unsigned ** matriceAdjacence, unsigned n){
+	
+	unsigned** res = new unsigned*[n];
+	for (int i = 0; i < n; i++)
+		res[i] = new unsigned[n];
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (i == j)
+				res[i][j] = 0;
+			else {
+				if (matriceAdjacence[i][j] != 0)
+					res[i][j] = matriceAdjacence[i][j];
+				else
+					res[i][j] = INFINIT;
+			}
+		}
+	}
+
+	for (int k = 0; k < n; k++) {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (res[i][j] > res[i][k] + res[k][j])
+					res[i][j] = res[i][k] + res[k][j];
+			}
+		}
+	}
+
+	return res;
+}
+
+unsigned TraitementGraphe::diametre() {
+	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
+
+	unsigned ** matrice = matriceDajdacence(&DonneesArete::estPresent);
+
+	unsigned ** matricePresence = FloydWarshall(matrice, n);
+
+	unsigned max = matricePresence[0][0];
+
+	for (int i = 0; i < n; i++){
+		for (int j = 0; j < n; j++){
+			if (matricePresence[i][j] > max && matricePresence[i][j] < INFINIT)
+				max = matricePresence[i][j];
+		}
+	}
+
+	return max;
 }

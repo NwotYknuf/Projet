@@ -14,7 +14,7 @@ public:
 
 	unsigned getDistance() { return distance; }
 	unsigned getDuree() { return duree; }
-
+	unsigned estPresent() { return 1; }
 
 	friend ostream& operator <<(ostream & os, const DonneesArete & a);
 };
