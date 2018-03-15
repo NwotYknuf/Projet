@@ -36,6 +36,6 @@ public:
 
 	void libererToutSommet();
 
-	void pccDijkstra(Sommet<DonneesSommet> * depart);
+	void pccDijkstra(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void) );
 
 };

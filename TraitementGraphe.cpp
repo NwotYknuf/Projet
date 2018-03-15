@@ -32,7 +32,8 @@ template<class Traitement>
 void inline TraitementGraphe::parcoursDFS(Traitement traitementPrefixe, Traitement traitementSuffixe) {
 	Maillon<Sommet<DonneesSommet>>* temp = graphe->lSommets;
 	while (temp != NULL) {
-		if (!temp->valeur->marque) parcoursComposante(temp->valeur, traitementPrefixe, traitementSuffixe);
+		if (!temp->valeur->marque) 
+			parcoursComposante(temp->valeur, traitementPrefixe, traitementSuffixe);
 		temp = temp->suivant;
 	}
 }
@@ -88,7 +89,7 @@ void TraitementGraphe::libererToutSommet() {
 	}
 }
 
-void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
+void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart, unsigned (DonneesArete::*critere)(void)) {
 
 		libererToutSommet();
 
@@ -109,15 +110,16 @@ void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart) {
 				Sommet<DonneesSommet> * v = temp2->valeur;
 
 				if (v->info.etat == DonneesSommet::LIBRE) {
-
 					v->info.pere = s;
-					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
+					unsigned coutSversV = (graphe->trouveAreteParSommets(s, v)->info.*critere)();
 					v->info.cout = s->info.cout + coutSversV;
 					v->info.etat = DonneesSommet::OUVERT;
 					ouverts = new Maillon<Sommet<DonneesSommet>>(v, ouverts);
 				}
 				else {
-					unsigned coutSversV = graphe->trouveAreteParSommets(s, v)->info.distance;
+
+					unsigned coutSversV = (graphe->trouveAreteParSommets(s, v)->info.*critere)();
+
 					if (v->info.etat == DonneesSommet::OUVERT &&
 						s->info.cout < coutSversV + v->info.cout) {
 

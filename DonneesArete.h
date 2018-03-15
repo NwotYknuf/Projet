@@ -12,6 +12,10 @@ public:
 	DonneesArete(unsigned _distance, unsigned _duree) { distance = _distance; duree = _duree; }
 	~DonneesArete() { };
 
+	unsigned getDistance() { return distance; }
+	unsigned getDuree() { return duree; }
+
+
 	friend ostream& operator <<(ostream & os, const DonneesArete & a);
 };
 

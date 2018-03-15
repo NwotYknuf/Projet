@@ -42,7 +42,8 @@ int main() {
 	TraitementGraphe traitement(&graph);
 
 	traitement.NumeroteGraphe();
-	traitement.pccDijkstra(s3);
+	traitement.pccDijkstra(s3, &DonneesArete::getDistance);
+	cout << graph << endl;
 	system("pause");
 
 	return 0;
