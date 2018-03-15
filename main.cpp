@@ -1,59 +1,8 @@
-#include "Graphe.h"
-#include "Donneesarete.h"
-#include "DonneesSommet.h"
+#include "TraitementGraphe.h"
 #include <string>
 #include <iostream>
 
 using namespace std;
-
-Maillon<Sommet<DonneesSommet>> * prefixeInverse;
-Maillon<Sommet<DonneesSommet>> * suffixeInverse;
-
-void affiche(Sommet<DonneesSommet> * sommet) {
-	cout << *sommet;
-}
-
-void neFaisRien(Sommet<DonneesSommet> * sommet) {
-
-}
-
-void ordrePefixeInverse(Sommet<DonneesSommet> * sommet) {
-	prefixeInverse = new Maillon<Sommet<DonneesSommet>>(sommet, prefixeInverse);
-}
-
-void ordreSuffixeInverse(Sommet<DonneesSommet> * sommet) {
-	suffixeInverse = new Maillon<Sommet<DonneesSommet>>(sommet, suffixeInverse);
-}
-
-void NumeroteGraphe(Graphe<DonneesArete, DonneesSommet>* graphe) {
-
-	Maillon<Sommet<DonneesSommet>> * temp;
-	Maillon<Sommet<DonneesSommet>> * temp2;
-	int num = 0;
-
-	temp = graphe->lSommets;
-
-	while (temp != NULL) {
-		temp->valeur->info.numerotation = ++num;
-		temp = temp->suivant;
-	}
-
-	graphe->parcoursDFS(ordrePefixeInverse, ordreSuffixeInverse);
-
-	int n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
-	temp = prefixeInverse;
-	temp2 = suffixeInverse;
-
-	while (temp != NULL) {
-		temp->valeur->info.numerotationPrefixe = n;
-		temp2->valeur->info.numerotationSuffixe = n;
-		n--;
-		temp = temp->suivant;
-		temp2 = temp2->suivant;
-	}
-
-}
-
 
 int main() {
 
@@ -92,12 +41,12 @@ int main() {
 	graph.creeArete(a, s11, s12);
 	graph.creeArete(a, s12, s11);
 
-	NumeroteGraphe(&graph);
+	TraitementGraphe traitement(&graph);
+
+	traitement.NumeroteGraphe();
 
 	cout << graph << endl;
-
-
-
+	
 	system("pause");
 
 	return 0;

@@ -75,13 +75,6 @@ public:
 
 	template  <class FENETRE>
 	bool dessine(FENETRE & fenetre) const;
-
-	template<class Traitement>
-	void parcoursComposantes(Sommet<infoSommet> * sommet, Traitement traitementPrefixe, Traitement traitementSuffixe);
-
-	template<class Traitement>
-	void parcoursDFS(Traitement traitementPrefixe, Traitement traitementSuffixe);
-
 };
 
 template <class infoArete, class infoSommet>
@@ -259,40 +252,6 @@ bool Graphe<infoArete, infoSommet>::dessine(FENETRE & fenetre) const
 	// ------------------------ on dessine les sommets --------------------------
 
 	return this->dessineTousSommets(fenetre);
-}
-
-template<class infoArete, class infoSommet>
-template<class Traitement>
-inline void Graphe<infoArete, infoSommet>::parcoursComposantes(Sommet<infoSommet>* sommet, Traitement traitementPrefixe, Traitement traitementSuffixe) {
-
-	sommet->marque = true;
-	
-	traitementPrefixe(sommet);
-
-	Maillon<Sommet<infoSommet>> * voisins = this->sommetsAdjacents(sommet);
-	Maillon<Sommet<infoSommet>> * temp = voisins;
-
-	while (temp != NULL) {
-		if (!temp->valeur->marque) 
-			parcoursComposantes(temp->valeur, traitementPrefixe, traitementSuffixe);
-		temp = temp->suivant;
-	}
-
-	traitementSuffixe(sommet);
-
-
-	Maillon<Sommet<infoSommet>>::effacePointeurs(voisins);
-}
-
-template<class infoArete, class infoSommet>
-template<class Traitement>
-inline void Graphe<infoArete, infoSommet>::parcoursDFS(Traitement traitementPrefixe, Traitement traitementSuffixe)
-{
-	Maillon<Sommet<infoSommet>>* temp = lSommets;
-	while (temp != NULL) {
-		if (!temp->valeur->marque) parcoursComposantes(temp->valeur, traitementPrefixe, traitementSuffixe);
-		temp = temp->suivant;
-	}
 }
 
 template <class infoSommet, class FENETRE>
