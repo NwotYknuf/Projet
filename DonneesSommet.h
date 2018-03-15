@@ -6,11 +6,12 @@ using namespace std;
 
 class DonneesSommet{
 public:
-	string nom;
+	string nom = "";
+	unsigned int numerotation = 0;
 	unsigned int numerotationPrefixe = 0;
 	unsigned int numerotationSuffixe = 0;
 
-	DonneesSommet() { nom = ""; }
+	DonneesSommet() { }
 	DonneesSommet(const string& _nom) { nom = _nom; }
 	~DonneesSommet() { };
 

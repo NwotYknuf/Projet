@@ -207,7 +207,6 @@ Graphe<infoArete, infoSommet>::operator string() const
 {
 	ostringstream oss;
 	oss << "Graphe" << endl << endl;
-	oss << "- prochaine clef = " << this->prochaineClef << endl<<endl;
 	oss << "- nombre de sommets = " << this->nombreSommets() << endl << endl;
 	oss << "- nombre d'aretes = " << this->nombreAretes() << endl << endl;
 	oss << "- Liste des sommets : " << endl<<endl;

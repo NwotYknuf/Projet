@@ -25,6 +25,39 @@ void ordreSuffixeInverse(Sommet<DonneesSommet> * sommet) {
 	suffixeInverse = new Maillon<Sommet<DonneesSommet>>(sommet, suffixeInverse);
 }
 
+void NumeroteGraphe(Graphe<DonneesArete, DonneesSommet>* graphe) {
+
+	Maillon<Sommet<DonneesSommet>> * temp;
+	Maillon<Sommet<DonneesSommet>> * temp2;
+	int num = 0;
+
+	temp = graphe->lSommets;
+
+	while (temp != NULL) {
+		temp->valeur->info.numerotation = ++num;
+		temp = temp->suivant;
+	}
+
+	graphe->parcoursDFS(ordrePefixeInverse, ordreSuffixeInverse);
+
+	int n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
+	temp = prefixeInverse;
+	temp2 = suffixeInverse;
+
+	while (temp != NULL) {
+		temp->valeur->info.numerotationPrefixe = n;
+		temp2->valeur->info.numerotationSuffixe = n;
+		n--;
+		temp = temp->suivant;
+		temp2 = temp2->suivant;
+	}
+
+	Maillon<Sommet<DonneesSommet>>::effacePointeurs(prefixeInverse);
+	Maillon<Sommet<DonneesSommet>>::effacePointeurs(suffixeInverse);
+
+}
+
+
 int main() {
 
 	Graphe<DonneesArete, DonneesSommet> graph;
@@ -62,9 +95,9 @@ int main() {
 	graph.creeArete(a, s11, s12);
 	graph.creeArete(a, s12, s11);
 
-	graph.parcoursDFS(ordrePefixeInverse, ordreSuffixeInverse);
+	NumeroteGraphe(&graph);
 
-	cout << graph.lAretes;
+	cout << graph << endl;
 
 
 
