@@ -49,5 +49,5 @@ return os << (string)arete;
 template <class infoArete, class infoSommet>
 bool Arete<infoArete,infoSommet>::estEgal( const Sommet<infoSommet> * s1, const Sommet<infoSommet> * s2) const
 {
-return (s1 == debut && s2 == fin) || (s1 == fin && s2 == debut);
+return s1 == debut && s2 == fin;
 }
