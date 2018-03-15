@@ -8,34 +8,34 @@
 
 template <class infoArete, class infoSommet>
 class Graphe {
-protected:
-
-	int prochaineClef;
-
 public:
 
 	Maillon< Sommet<infoSommet> > * lSommets; // liste de sommets
 	Maillon< Arete<infoArete, infoSommet> > * lAretes; // liste d'arêtes
 
-private:
+public:
 
-	void majProchaineClef(const int clef) { prochaineClef = max(1 + clef, prochaineClef); }
-	
-	Sommet<infoSommet> * creeSommetSansMAJ(const int clef, const infoSommet & info);
+	Sommet<infoSommet> * creeSommet(const infoSommet & info) {  
 
-	Arete<infoArete, infoSommet> * creeAreteSansMAJ(const int clef, const infoArete & info, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin);
-	
-	Sommet<infoSommet> * creeSommet(const int clef, const infoSommet & info) { majProchaineClef(clef); return creeSommetSansMAJ(clef, info); }
+		Sommet<infoSommet> * sommetCree = new Sommet<infoSommet>(info);
+		lSommets = new Maillon< Sommet<infoSommet> >(sommetCree, lSommets);
 
-	Arete<infoArete, infoSommet> * creeArete(const int clef, const infoArete & info, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin) {
-		majProchaineClef(clef);
-		return creeAreteSansMAJ(clef, info, debut, fin);
+		return sommetCree;
 	}
 
-public:
-	Sommet<infoSommet> * creeSommet(const infoSommet & info) { return creeSommetSansMAJ(prochaineClef++, info); }
+	Arete<infoArete, infoSommet> * creeArete(const infoArete & info, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin) {
+		// ici tester que les 2 sommets sont bien existants dans le graphe
+		if (!Maillon< Sommet<infoSommet> >::appartient(debut, lSommets)) 
+			throw Erreur("début d'arête non défini");
+		if (!Maillon< Sommet<infoSommet> >::appartient(fin, lSommets)) 
+			throw Erreur("fin d'arête non définie");
 
-	Arete<infoArete, infoSommet> * creeArete(const infoArete & info, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin) { return creeAreteSansMAJ(prochaineClef++, info, debut, fin); }
+		Arete<infoArete, infoSommet> *  nouvelleArete = new Arete<infoArete, infoSommet>(info, debut, fin);
+
+		lAretes = new Maillon< Arete<infoArete, infoSommet> >(nouvelleArete, lAretes);
+
+		return nouvelleArete;
+	}
 
 private:
 
@@ -45,7 +45,7 @@ private:
 
 public:
 
-	Graphe() : prochaineClef(0), lSommets(NULL), lAretes(NULL) {}
+	Graphe() : lSommets(NULL), lAretes(NULL) {}
 
 	Graphe(const Graphe<infoArete, infoSommet> & graphe) : Graphe() { this->copie(graphe); }
 
@@ -86,30 +86,6 @@ public:
 
 template <class infoArete, class infoSommet>
 ostream & operator << (ostream & os, const Graphe<infoArete, infoSommet> & gr) { return os << (string)gr; }
-
-template <class infoArete, class infoSommet>
-Sommet<infoSommet> * Graphe<infoArete, infoSommet>::creeSommetSansMAJ(const int clef, const infoSommet & info)
-{
-	Sommet<infoSommet> * sommetCree = new Sommet<infoSommet>(clef, info);
-	lSommets = new Maillon< Sommet<infoSommet> >(sommetCree, lSommets);
-
-	return sommetCree;
-}
-
-template <class infoArete, class infoSommet>
-Arete<infoArete, infoSommet> * Graphe<infoArete, infoSommet>::creeAreteSansMAJ(const int clef, const infoArete & info, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin)
-{
-
-	// ici tester que les 2 sommets sont bien existants dans le graphe
-	if (!Maillon< Sommet<infoSommet> >::appartient(debut, lSommets)) throw Erreur("début d'arête non défini");
-	if (!Maillon< Sommet<infoSommet> >::appartient(fin, lSommets)) throw Erreur("fin d'arête non définie");
-
-	Arete<infoArete, infoSommet> *  nouvelleArete = new Arete<infoArete, infoSommet>(clef, info, debut, fin);
-
-	lAretes = new Maillon< Arete<infoArete, infoSommet> >(nouvelleArete, lAretes);
-
-	return nouvelleArete;
-}
 
 template <class infoSommet>
 class SommetDejaPresentDansLaCopie
@@ -165,7 +141,6 @@ void Graphe<infoArete, infoSommet>::effaceTout()
 {
 	Maillon< Arete<infoArete, infoSommet>>::effaceObjets(this->lAretes);
 	Maillon<Sommet<infoSommet> >::effaceObjets(this->lSommets);
-	this->prochaineClef = 0;
 }
 
 template <class infoArete, class infoSommet>

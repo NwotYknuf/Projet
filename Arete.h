@@ -3,18 +3,18 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "GElement.h"
 #include "Sommet.h"
 
 using namespace std;
 
 template <class infoArete, class infoSommet>
-class Arete : public GElement<infoArete>
+class Arete
 {
 public:
 Sommet <infoSommet> *debut, *fin;
+infoArete info;
 
-Arete( const int clef, const infoArete & v, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin) : GElement<infoArete>( clef, v) ,debut( debut), fin( fin)
+Arete(const infoArete & v, Sommet<infoSommet> * debut, Sommet<infoSommet> * fin) : debut(debut), fin(fin), info(v)
 {
 debut->degre++; fin->degre++;
 }
@@ -32,9 +32,9 @@ Arete<infoArete,infoSommet>::operator string () const
 ostringstream oss;
 
 oss <<"Arete{"<< endl;
-oss << GElement<infoArete>::operator string()<<endl;
-oss << "clef debut = " << debut->clef<< endl;
-oss << "clef fin = " << fin->clef << endl;
+oss << "Debut = " << *debut<< endl;
+oss << "Fin = " << *fin << endl;
+oss << endl << "infos : " << info << endl;
 oss << "}" <<endl;
 return oss.str();
 

@@ -3,18 +3,18 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "GElement.h"
 
 using namespace std;
 
 template <class infoSommet>
-class Sommet : public GElement<infoSommet>
+class Sommet
 {
 public:
 int degre;
 bool marque;
+infoSommet info;
 
-Sommet(const int clef, const infoSommet & v):GElement<infoSommet>(clef,v),degre(0), marque(false){ }
+Sommet(const infoSommet & v) : info(v), degre(0), marque(false) { }
 
 operator string () const;
 
@@ -26,8 +26,9 @@ Sommet<infoSommet>::operator string () const
 ostringstream oss;
 
 oss <<"Sommet{"<<endl;
-oss << GElement<infoSommet>::operator string()<<endl;
-oss<<"degre = " << degre << endl;
+oss << "degre = " << degre << endl;
+oss << "marque = " << marque ? "oui" : "non";
+oss << endl << endl << "infos : " << endl << info << endl;
 oss<<"}"<<endl;
 return oss.str();
 }

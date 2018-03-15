@@ -6,12 +6,23 @@
 
 using namespace std;
 
+Maillon<Sommet<DonneesSommet>> * prefixeInverse;
+Maillon<Sommet<DonneesSommet>> * suffixeInverse;
+
 void affiche(Sommet<DonneesSommet> * sommet) {
 	cout << *sommet;
 }
 
 void neFaisRien(Sommet<DonneesSommet> * sommet) {
 
+}
+
+void ordrePefixeInverse(Sommet<DonneesSommet> * sommet) {
+	prefixeInverse = new Maillon<Sommet<DonneesSommet>>(sommet, prefixeInverse);
+}
+
+void ordreSuffixeInverse(Sommet<DonneesSommet> * sommet) {
+	suffixeInverse = new Maillon<Sommet<DonneesSommet>>(sommet, suffixeInverse);
 }
 
 int main() {
@@ -51,8 +62,12 @@ int main() {
 	graph.creeArete(a, s11, s12);
 	graph.creeArete(a, s12, s11);
 
+	graph.parcoursDFS(ordrePefixeInverse, ordreSuffixeInverse);
 
-	graph.parcoursDFS(neFaisRien, affiche);
+	cout << graph.lAretes;
+
+
+
 	system("pause");
 
 	return 0;
