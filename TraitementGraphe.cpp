@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TraitementGraphe.h"
 #include <math.h>
 

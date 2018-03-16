@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "donneesSommet.h"
 
 const unsigned DonneesSommet::LIBRE = 0u;
