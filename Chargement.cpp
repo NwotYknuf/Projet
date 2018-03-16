@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Chargement.h"
 #include <fstream>
 
@@ -39,7 +38,7 @@ void Chargement::split(string str, string splitBy, vector<string>& tokens)
 }
 
 
-Graphe<DonneesArete, DonneesSommet> Chargement::charger(string chemin) {
+Graphe<DonneesArete, DonneesSommet> * Chargement::charger(string chemin) {
 	ifstream file(chemin, ios::in);
 	if (file) {
 		string line;
@@ -49,4 +48,6 @@ Graphe<DonneesArete, DonneesSommet> Chargement::charger(string chemin) {
 		file.close();
 	}
 	else cerr << "Impossible d'ouvrir le fichier!" << endl;
+
+	return NULL;
 }

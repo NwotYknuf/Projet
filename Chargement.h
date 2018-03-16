@@ -7,5 +7,5 @@
 class Chargement {
 public:
 	static void split(string str, string splitBy, vector<string>& tokens);
-	static Graphe<DonneesArete, DonneesSommet> charger(string chemin);
+	static Graphe<DonneesArete, DonneesSommet> * charger(string chemin);
 };
