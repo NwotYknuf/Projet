@@ -13,7 +13,7 @@ private:
 
 public:
 
-	static const unsigned INFINIT;
+	static const unsigned INFINI;
 		
 	TraitementGraphe() = delete;
 	TraitementGraphe(const TraitementGraphe&) = delete;
@@ -40,7 +40,7 @@ public:
 
 	void pccDijkstra(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void) );
 
-	unsigned** matriceDajdacence(unsigned(DonneesArete::*critere)(void));
+	unsigned** matriceAjdacence(unsigned(DonneesArete::*critere)(void));
 
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
 
