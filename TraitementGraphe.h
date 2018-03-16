@@ -45,4 +45,5 @@ public:
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
 
 	unsigned diametre();
+
 };

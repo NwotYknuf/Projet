@@ -13,6 +13,10 @@ public:
 	unsigned int numerotation = 0;
 	unsigned int numerotationPrefixe = 0;
 	unsigned int numerotationSuffixe = 0;
+
+	//chargementGPR
+	bool source = false;
+	bool puit = false;
 	
 	//Dijkstra
 	static const unsigned LIBRE;
