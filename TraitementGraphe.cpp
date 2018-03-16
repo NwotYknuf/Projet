@@ -156,6 +156,9 @@ unsigned ** TraitementGraphe::matriceDajdacence(unsigned(DonneesArete::*critere)
 	int i =0,j = 0;
 
 	while (temp != NULL) {
+		temp->valeur->info.etat = DonneesSommet::LIBRE;
+		temp->valeur->info.pere = NULL;
+		temp->valeur->info.cout = INFINIT;
 		while (temp2!=NULL){
 
 			Arete<DonneesArete, DonneesSommet> * s = graphe->trouveAreteParSommets(temp->valeur, temp2->valeur);
@@ -223,25 +226,7 @@ unsigned TraitementGraphe::diametre() {
 				max = matricePresence[i][j];
 		}
 	}
-
-<<<<<<< HEAD
-}
-
-
-int TraitementGraphe::diametre() {
-	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
-	int i = 0;
-	int diametre = 0;
-	while (temp != NULL) {
-		temp->valeur->marque = true;
-		Maillon<Sommet<DonneesSommet>> * listeVoisins = graphe->sommetsAdjacents(temp->valeur);
-		int tailleListeVoisins = Maillon<Sommet<DonneesSommet>>::taille(listeVoisins);
-		if (tailleListeVoisins != 0) diametre++;
-		for (i; i < tailleListeVoisins; i++) {
-
-		}
-	}
-=======
 	return max;
->>>>>>> ca87077731c422e73f14c60b324a766bcbeb96f1
 }
+
+

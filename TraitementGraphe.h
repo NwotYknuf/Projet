@@ -38,10 +38,6 @@ public:
 
 	void libererToutSommet();
 
-<<<<<<< HEAD
-	int diametre();
-
-=======
 	void pccDijkstra(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void) );
 
 	unsigned** matriceDajdacence(unsigned(DonneesArete::*critere)(void));
@@ -49,5 +45,4 @@ public:
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
 
 	unsigned diametre();
->>>>>>> ca87077731c422e73f14c60b324a766bcbeb96f1
 };
