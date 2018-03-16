@@ -2,7 +2,7 @@
 #include "TraitementGraphe.h"
 #include <math.h>
 
-const unsigned TraitementGraphe::INFINIT = 1000000;
+const unsigned TraitementGraphe::INFINI = 1000000;
 
 /*
 * traitementPrefixe et traitementSuffixe doivent être des méthodes membres de TraitementGraphe.
@@ -88,7 +88,7 @@ void TraitementGraphe::libererToutSommet() {
 	while (temp != NULL) {
 		temp->valeur->info.etat = DonneesSommet::LIBRE;
 		temp->valeur->info.pere = NULL;
-		temp->valeur->info.cout = INFINIT;
+		temp->valeur->info.cout = INFINI;
 		temp = temp->suivant;
 	}
 }
@@ -141,7 +141,7 @@ void TraitementGraphe::pccDijkstra(Sommet<DonneesSommet> * depart, unsigned (Don
 
 }
 
-unsigned ** TraitementGraphe::matriceDajdacence(unsigned(DonneesArete::*critere)(void)){
+unsigned ** TraitementGraphe::matriceAjdacence(unsigned(DonneesArete::*critere)(void)){
 
 	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
 
@@ -158,7 +158,7 @@ unsigned ** TraitementGraphe::matriceDajdacence(unsigned(DonneesArete::*critere)
 	while (temp != NULL) {
 		temp->valeur->info.etat = DonneesSommet::LIBRE;
 		temp->valeur->info.pere = NULL;
-		temp->valeur->info.cout = INFINIT;
+		temp->valeur->info.cout = INFINI;
 		while (temp2!=NULL){
 
 			Arete<DonneesArete, DonneesSommet> * s = graphe->trouveAreteParSommets(temp->valeur, temp2->valeur);
@@ -194,7 +194,7 @@ unsigned ** TraitementGraphe::FloydWarshall(unsigned ** matriceAdjacence, unsign
 				if (matriceAdjacence[i][j] != 0)
 					res[i][j] = matriceAdjacence[i][j];
 				else
-					res[i][j] = INFINIT;
+					res[i][j] = INFINI;
 			}
 		}
 	}
@@ -214,7 +214,7 @@ unsigned ** TraitementGraphe::FloydWarshall(unsigned ** matriceAdjacence, unsign
 unsigned TraitementGraphe::diametre() {
 	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
 
-	unsigned ** matrice = matriceDajdacence(&DonneesArete::estPresent);
+	unsigned ** matrice = matriceAjdacence(&DonneesArete::estPresent);
 
 	unsigned ** matricePresence = FloydWarshall(matrice, n);
 
@@ -222,11 +222,9 @@ unsigned TraitementGraphe::diametre() {
 
 	for (int i = 0; i < n; i++){
 		for (int j = 0; j < n; j++){
-			if (matricePresence[i][j] > max && matricePresence[i][j] < INFINIT)
+			if (matricePresence[i][j] > max && matricePresence[i][j] < INFINI)
 				max = matricePresence[i][j];
 		}
 	}
 	return max;
 }
-
-

@@ -40,6 +40,8 @@ public:
 
 	void pccDijkstra(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void) );
 
+	void pccFord(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void));
+
 	unsigned** matriceAjdacence(unsigned(DonneesArete::*critere)(void));
 
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
