@@ -13,6 +13,8 @@ private:
 
 public:
 
+	static const unsigned INFINIT;
+		
 	TraitementGraphe() = delete;
 	TraitementGraphe(const TraitementGraphe&) = delete;
 	TraitementGraphe(Graphe<DonneesArete, DonneesSommet>* _graphe) : graphe(_graphe) { };
@@ -28,12 +30,24 @@ public:
 
 	void neFaisRien(Sommet<DonneesSommet> * sommet) { }
 
-	void ordrePefixeInverse(Sommet<DonneesSommet> * sommet);
+	void ordrePrefixeInverse(Sommet<DonneesSommet> * sommet);
 
 	void ordreSuffixeInverse(Sommet<DonneesSommet> * sommet);
 
 	void NumeroteGraphe();
 
-	void pccDijkstra(Sommet<DonneesSommet> * depart);
+	void libererToutSommet();
 
+<<<<<<< HEAD
+	int diametre();
+
+=======
+	void pccDijkstra(Sommet<DonneesSommet> * depart, unsigned(DonneesArete::*critere)(void) );
+
+	unsigned** matriceDajdacence(unsigned(DonneesArete::*critere)(void));
+
+	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
+
+	unsigned diametre();
+>>>>>>> ca87077731c422e73f14c60b324a766bcbeb96f1
 };
