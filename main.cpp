@@ -8,7 +8,7 @@ using namespace std;
 void affiche(unsigned ** matrice, unsigned n) {
 	for (int i = 0; i < n; i++){
 		for (int j = 0; j < n; j++)	{
-			if (matrice[i][j] < TraitementGraphe::INFINIT)
+			if (matrice[i][j] < TraitementGraphe::INFINI)
 				cout << matrice[i][j] << " , ";
 			else
 				cout << "0 , ";
@@ -86,7 +86,7 @@ int main() {
 	TraitementGraphe traiteTauro(&graphTauro);
 
 	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphTauro.lSommets);
-	unsigned ** matriceAdjacence = traiteTauro.matriceDajdacence(&DonneesArete::estPresent);
+	unsigned ** matriceAdjacence = traiteTauro.matriceAjdacence(&DonneesArete::estPresent);
 	unsigned ** floyd = traiteTauro.FloydWarshall(matriceAdjacence, n);
 	affiche(matriceAdjacence, n);
 	cout << endl;
