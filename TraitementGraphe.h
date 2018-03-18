@@ -53,5 +53,7 @@ public:
 
 	unsigned diametre();
 
+	bool estSansCycle();
+
 
 };

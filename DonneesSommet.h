@@ -27,6 +27,9 @@ public:
 	unsigned cout;
 	unsigned etat;
 
+	//Circuits
+	unsigned degreEntrant = 0;
+
 	DonneesSommet() { }
 	DonneesSommet(const string& _nom, int _x = 0, int _y = 0) :nom(_nom), x(_x), y(_y) {}
 	~DonneesSommet() { };

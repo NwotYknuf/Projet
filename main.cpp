@@ -16,7 +16,7 @@ void affiche(unsigned ** matrice, unsigned n) {
 	}
 }
 
-int main1() {
+int main() {
 	
 	Graphe<DonneesArete, DonneesSommet> graphTauro;
 	DonneesArete a(1, 1);
@@ -28,16 +28,11 @@ int main1() {
 	Sommet<DonneesSommet> * s1 = graphTauro.creeSommet(DonneesSommet("s1"));
 
 	graphTauro.creeArete(a, s1, s2);
-	graphTauro.creeArete(a, s2, s1);
-
 	graphTauro.creeArete(a, s2, s3);
-	graphTauro.creeArete(a, s3, s2);
-
-	graphTauro.creeArete(a, s2, s4);
-	graphTauro.creeArete(a, s4, s2);
-	
+	graphTauro.creeArete(a, s2, s4);	
 	graphTauro.creeArete(a, s4, s3);
-	graphTauro.creeArete(a, s3, s4);
+	graphTauro.creeArete(a, s4, s5);
+
 
 	TraitementGraphe traiteTauro(&graphTauro);
 
@@ -54,13 +49,22 @@ int main1() {
 	for (Maillon<Sommet<DonneesSommet>>* liste : compConnexe) {
 		cout << "=============================================" << endl << liste << endl;
 	}
+	
+	cout << "Circuit present : ";
+
+	if (traiteTauro.estSansCycle())
+		cout << "Non";
+	else
+		cout << "Oui";
+
+	cout << endl;
 
 	system("pause");
 
 	return 0;
 }
 
-int main() {
+int main1() {
 
 	Graphe<DonneesArete, DonneesSommet> graph22;
 	DonneesArete a(1, 1);
@@ -112,6 +116,15 @@ int main() {
 	for (Maillon<Sommet<DonneesSommet>>* liste : compConnexe) {
 		cout << "=============================================" << endl << liste << endl;
 	}
+
+	cout << "Circuit present : ";
+
+	if (traitement22.estSansCycle())
+		cout << "Non";
+	else
+		cout << "Oui";
+
+	cout << endl;
 
 	system("pause");
 

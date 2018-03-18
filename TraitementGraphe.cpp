@@ -230,6 +230,57 @@ unsigned TraitementGraphe::diametre() {
 	return max;
 }
 
+bool TraitementGraphe::estSansCycle(){
+
+	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
+	unsigned nbSommet = 0;
+
+	while (temp != NULL) {
+		Maillon<Arete<DonneesArete, DonneesSommet>> * temp1 = graphe->lAretes;
+
+		while (temp1 != NULL) {
+			if (temp1->valeur->fin == temp->valeur)
+				temp->valeur->info.degreEntrant++;
+			temp1 = temp1->suivant;
+		}
+		temp = temp->suivant;
+	}
+
+	temp = graphe->lSommets;
+	Maillon<Sommet<DonneesSommet>> * aTraiter = NULL;
+	
+	while (temp != NULL) {
+
+		if (temp->valeur->info.degreEntrant == 0) {
+			aTraiter = new Maillon<Sommet<DonneesSommet>>(temp->valeur, aTraiter);
+			nbSommet++;
+		}
+		temp = temp->suivant;
+	}
+	
+	while (aTraiter != NULL) {
+		Sommet<DonneesSommet> *s = Maillon<Sommet<DonneesSommet>>::depiler(aTraiter);
+
+		Maillon<Sommet<DonneesSommet>> * voisinsS = graphe->sommetsAdjacents(s);
+		Maillon<Sommet<DonneesSommet>> * temp2 = voisinsS;
+
+		while (temp2 != NULL) {			
+			temp2->valeur->info.degreEntrant--;
+
+			if (temp2->valeur->info.degreEntrant == 0) {
+				aTraiter = new Maillon<Sommet<DonneesSommet>>(temp2->valeur, aTraiter);
+				nbSommet++;
+			}
+
+			temp2 = temp2->suivant;
+		}
+		
+		Maillon<Sommet<DonneesSommet>>::effacePointeurs(voisinsS);
+	}
+
+	return nbSommet == Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
+}
+
 vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesFortementConnexes() {
 
 	libererToutSommet();
