@@ -1,5 +1,4 @@
 #include "TraitementGraphe.h"
-#include <math.h>
 
 const unsigned TraitementGraphe::INFINI = 1000000;
 
@@ -33,6 +32,7 @@ void inline TraitementGraphe::parcoursComposante(Sommet<DonneesSommet>* sommet, 
 */
 template<class Traitement>
 void inline TraitementGraphe::parcoursDFS(Traitement traitementPrefixe, Traitement traitementSuffixe) {
+	libererToutSommet();
 	Maillon<Sommet<DonneesSommet>>* temp = graphe->lSommets;
 	while (temp != NULL) {
 		if (!temp->valeur->marque) 
@@ -226,4 +226,53 @@ unsigned TraitementGraphe::diametre() {
 		}
 	}
 	return max;
+}
+
+vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesConnexes() {
+
+	libererToutSommet();
+
+	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
+	unsigned ** matriceAdjacence = matriceAjdacence(&DonneesArete::getDistance);
+	unsigned** matriceFloyd = FloydWarshall(matriceAdjacence, n);
+
+	int i=0, j=0;
+
+	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
+	Maillon<Sommet<DonneesSommet>> * composante;
+	vector<Maillon<Sommet<DonneesSommet>>*> compConnexes;
+
+	while (temp != NULL) {
+		
+		if (!graphe->lSommets->get(j)->marque) {
+
+			composante = new Maillon<Sommet<DonneesSommet>>(temp->valeur, NULL);
+			temp->valeur->marque = true;
+
+			while (i < n) {
+
+				if (matriceFloyd[i][j] != INFINI && matriceFloyd[i][j] != 0
+					&& matriceFloyd[j][i] != INFINI && matriceFloyd[j][i] != 0) {
+
+					if (graphe->lSommets->get(i)->marque) {
+						composante = new Maillon<Sommet<DonneesSommet>>(
+							graphe->lSommets->get(i), composante);
+						graphe->lSommets->get(i)->marque = true;
+					}
+				}
+
+				i++;
+			}
+
+		}
+
+		compConnexes.push_back(composante);
+
+		j++;
+		i = 0;
+		temp = temp->suivant;
+	}
+
+
+	return compConnexes;
 }

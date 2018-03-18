@@ -64,7 +64,7 @@ public:
 	Maillon< Sommet<infoSommet> > *  sommetsAdjacents(const Sommet<infoSommet> * sommet) const;
 
 	Arete<infoArete, infoSommet> * trouveAreteParSommets(const Sommet<infoSommet> * s1, const Sommet<infoSommet> * s2) const;
-
+	
 	operator string() const;
 
 	template< class FENETRE>

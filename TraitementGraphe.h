@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
 #include "Graphe.h"
 #include "DonneesArete.h"
 #include "DonneesSommet.h"
+
+using namespace std;
 
 class TraitementGraphe{
 
@@ -44,8 +47,11 @@ public:
 
 	unsigned** matriceAjdacence(unsigned(DonneesArete::*critere)(void));
 
+	vector<Maillon<Sommet<DonneesSommet>>*> composantesConnexes();
+
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
 
 	unsigned diametre();
+
 
 };

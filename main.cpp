@@ -10,7 +10,7 @@ void affiche(unsigned ** matrice, unsigned n) {
 			if (matrice[i][j] < TraitementGraphe::INFINI)
 				cout << matrice[i][j] << " , ";
 			else
-				cout << "0 , ";
+				cout << "I , ";
 		}
 		cout << endl;
 	}
@@ -70,14 +70,16 @@ int main() {
 	Graphe<DonneesArete, DonneesSommet> graphTauro;
 	DonneesArete a(1, 1);
 
-	Sommet<DonneesSommet> * s1 = graphTauro.creeSommet(DonneesSommet("s1"));
-	Sommet<DonneesSommet> * s2 = graphTauro.creeSommet(DonneesSommet("s2"));
-	Sommet<DonneesSommet> * s3 = graphTauro.creeSommet(DonneesSommet("s3"));
-	Sommet<DonneesSommet> * s4 = graphTauro.creeSommet(DonneesSommet("s4"));
 	Sommet<DonneesSommet> * s5 = graphTauro.creeSommet(DonneesSommet("s5"));
+	Sommet<DonneesSommet> * s4 = graphTauro.creeSommet(DonneesSommet("s4"));
+	Sommet<DonneesSommet> * s3 = graphTauro.creeSommet(DonneesSommet("s3"));
+	Sommet<DonneesSommet> * s2 = graphTauro.creeSommet(DonneesSommet("s2"));
+	Sommet<DonneesSommet> * s1 = graphTauro.creeSommet(DonneesSommet("s1"));
 
 	graphTauro.creeArete(a, s1, s2);
+	graphTauro.creeArete(a, s2, s1);
 	graphTauro.creeArete(a, s2, s3);
+	graphTauro.creeArete(a, s3, s2);
 	graphTauro.creeArete(a, s2, s4);
 	graphTauro.creeArete(a, s3, s4);
 	graphTauro.creeArete(a, s4, s5);
@@ -91,6 +93,13 @@ int main() {
 	cout << endl;
 	affiche(floyd, n);
 	cout << endl << traiteTauro.diametre() << endl;
+
+	vector<Maillon<Sommet<DonneesSommet>>*> compConnexe = traiteTauro.composantesConnexes();
+	
+	for (Maillon<Sommet<DonneesSommet>>* liste : compConnexe) {
+		cout << "BONJOUR" << liste << endl;
+	}
+
 	system("pause");
 #pragma endregion
 
