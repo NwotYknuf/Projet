@@ -88,6 +88,8 @@ void TraitementGraphe::libererToutSommet() {
 		temp->valeur->info.etat = DonneesSommet::LIBRE;
 		temp->valeur->info.pere = NULL;
 		temp->valeur->info.cout = INFINI;
+		temp->valeur->marque = false;
+
 		temp = temp->suivant;
 	}
 }
@@ -228,7 +230,7 @@ unsigned TraitementGraphe::diametre() {
 	return max;
 }
 
-vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesConnexes() {
+vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesFortementConnexes() {
 
 	libererToutSommet();
 
@@ -239,7 +241,7 @@ vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesConnexes() 
 	int i=0, j=0;
 
 	Maillon<Sommet<DonneesSommet>> * temp = graphe->lSommets;
-	Maillon<Sommet<DonneesSommet>> * composante;
+	Maillon<Sommet<DonneesSommet>> * composante = NULL;
 	vector<Maillon<Sommet<DonneesSommet>>*> compConnexes;
 
 	while (temp != NULL) {
@@ -254,7 +256,7 @@ vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesConnexes() 
 				if (matriceFloyd[i][j] != INFINI && matriceFloyd[i][j] != 0
 					&& matriceFloyd[j][i] != INFINI && matriceFloyd[j][i] != 0) {
 
-					if (graphe->lSommets->get(i)->marque) {
+					if (!graphe->lSommets->get(i)->marque) {
 						composante = new Maillon<Sommet<DonneesSommet>>(
 							graphe->lSommets->get(i), composante);
 						graphe->lSommets->get(i)->marque = true;
@@ -266,7 +268,10 @@ vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesConnexes() 
 
 		}
 
-		compConnexes.push_back(composante);
+		if (composante != NULL) {
+			compConnexes.push_back(composante);
+			composante = NULL;
+		}
 
 		j++;
 		i = 0;

@@ -47,7 +47,7 @@ public:
 
 	unsigned** matriceAjdacence(unsigned(DonneesArete::*critere)(void));
 
-	vector<Maillon<Sommet<DonneesSommet>>*> composantesConnexes();
+	vector<Maillon<Sommet<DonneesSommet>>*> composantesFortementConnexes();
 
 	unsigned** FloydWarshall(unsigned ** matriceAdjacence, unsigned n);
 
