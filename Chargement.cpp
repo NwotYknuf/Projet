@@ -116,7 +116,8 @@ Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemi
 		}
 		
 	}
-	else cerr << "Impossible d'ouvrir le fichier!" << endl;
+	else
+		throw Erreur("Impossible d'ouvrir le fichier !");
 	return listeSommets;
 }
 
@@ -158,7 +159,6 @@ Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const s
 					cerr << e << endl;
 				}
 
-
 				DonneesArete infoArete(ligneSplit[0], stoi(ligneSplit[3]), stoi(ligneSplit[4]));
 				Arete<DonneesArete, DonneesSommet>* arete = new Arete<DonneesArete, DonneesSommet>(infoArete, debut, fin);
 				lAretes = new Maillon<Arete<DonneesArete,DonneesSommet>>(arete, lAretes);
@@ -171,6 +171,7 @@ Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const s
 		file.close();
 	}
 
-	else cerr << "Impossible d'ouvrir le fichier!" << endl;
+	else 
+		throw Erreur("Impossible d'ouvrir le fichier !");
 	return lAretes;
 }

@@ -17,6 +17,15 @@ void affiche(unsigned ** matrice, unsigned n) {
 	}
 }
 
+void afficheChemin(Sommet<DonneesSommet> * s) {
+	if (s == NULL)
+		cout << endl;
+	else {
+		cout << s->info.nom << ", ";
+		afficheChemin(s->info.pere);
+	}
+}
+
 int main2() {
 	
 	Graphe<DonneesArete, DonneesSommet> graphTauro;
@@ -132,15 +141,120 @@ int main1() {
 	return 0;
 }
 
-int main() {
+int main3() {
 	Graphe<DonneesArete, DonneesSommet>* grapheCharge;
-	cout << "chargement..." << endl;
+	cout << "chargement du graphe..." << endl;
 	grapheCharge = Chargement::charger("GrapheFormatGPR/Ex3.gpr");
-	cout << "Finit, Numerotation..." << endl;
+	cout << "Numerotation du graphe..." << endl;
 	TraitementGraphe traiteGraphe(grapheCharge);
 	traiteGraphe.NumeroteGraphe();
-	cout << "Finit !" << endl;
-	cout << *(grapheCharge) << endl;
-
+	cout << "Calcul du plus cours chemin entre i1 et toutes les autres arretes..." << endl;
+	Sommet<DonneesSommet> * i1, *i160;
+	i1 = traiteGraphe.trouverSommetParNom(grapheCharge->lSommets, "i1");
+	i160 = traiteGraphe.trouverSommetParNom(grapheCharge->lSommets,"i160");
+	traiteGraphe.pccDijkstra(i1, &DonneesArete::getDistance);
+	cout << "Finit ! Plus court chemin entre i1 et i160 : " << endl;
+	afficheChemin(i160);
 	system("pause");
+	return 0;
 }
+
+int main() {
+
+	//Chargement
+
+	bool ok = false;
+
+	while (!ok) {
+		try {
+			cout << "Entrez le nom du fichier gpr a charger : " << endl;
+			string chemin = "GrapheFormatGPR/";
+			string nom;
+			cin >> nom;
+
+			Graphe<DonneesArete, DonneesSommet>* graphe;
+			graphe = Chargement::charger(chemin + nom);
+			TraitementGraphe traiteGraphe(graphe);
+			ok = true;
+
+		}
+		catch (Erreur e) {
+			cout << e << endl << endl;
+		}
+	}
+
+
+	//main menu
+	int choix = 0;
+
+	while (choix > 5 || choix < 1) {
+		try {
+			system("cls");
+			cout << "Graphe charge avec succes" << endl
+				<< "1) Plus court chemin (temps ou cout) Dijkstra" << endl
+				<< "2) Presence de cycles" << endl
+				<< "3) Numeroter le graphe" << endl
+				<< "4) Matrice d'adjacence" << endl
+				<< "4) Matrice de Floyd/Warshall" << endl
+				<< "5) Composantes fortement connexe" << endl;
+
+			cin >> choix;
+			if (!cin) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				throw Erreur("Entrez un nombre entre 1 et 5");
+
+			}
+
+		}
+		catch (Erreur e) {
+			cout << e << endl;
+			system("pause");
+		}
+
+	}
+
+	switch (choix) {
+	case 1:
+
+		choix = 0;
+
+		while (choix > 2 || choix < 1) {
+			try {
+				system("cls");
+
+				system("cls");
+				cout << "Plus court chemin" << endl
+					<< "Quel critere utiliser ?" << endl
+					<< "1) Cout" << endl
+					<< "2) Duree" << endl;
+
+				cin >> choix;
+				if (!cin) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					throw Erreur("Entrez un nombre entre 1 et 2");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
+			}
+		}
+
+		if (choix == 1) {
+		}
+
+
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+		break;
+	}
+
+
+
+
+}
+

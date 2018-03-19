@@ -1,6 +1,6 @@
 #include "TraitementGraphe.h"
 
-const unsigned TraitementGraphe::INFINI = 1000000;
+const unsigned TraitementGraphe::INFINI = 4000000;
 
 /*
 * traitementPrefixe et traitementSuffixe doivent être des méthodes membres de TraitementGraphe.
