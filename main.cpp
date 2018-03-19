@@ -47,7 +47,18 @@ void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
 	}
 }
 
-void afficheAretes(Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes) {
+string areteToString(Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes) {
+	Maillon<Arete<DonneesArete, DonneesSommet>>* temp = lAretes;
+	ostringstream oss;
+	while (temp != NULL) {
+		oss << "Arcs " << temp->valeur->info.name << ";  debut: " << temp->valeur->debut->info.nom << ";   fin: " << temp->valeur->fin->info.nom;
+		oss << ";   cout: " << temp->valeur->info.distance << ";   duree: " << temp->valeur->info.duree << endl;
+		temp = temp->suivant;
+	}
+	return oss.str();
+}
+
+void afficheArete(Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes) {
 	Maillon<Arete<DonneesArete, DonneesSommet>>* temp = lAretes;
 	while (temp != NULL) {
 		cout << "Arcs " << temp->valeur->info.name << ";  debut: " << temp->valeur->debut->info.nom << ";   fin: " << temp->valeur->fin->info.nom;
@@ -85,6 +96,33 @@ void sauvegarde(string aff, string path) {
 	else
 		throw Erreur("Impossible de creer le fichier");
 }
+
+void afficheListeCFC(vector<Maillon<Sommet<DonneesSommet>>*> listeCFC) {
+	int i = 1;
+
+	for (Maillon<Sommet<DonneesSommet>>* liste : listeCFC) {
+		cout << "CFC " << i << ": " << endl;
+		afficheSommets(liste);
+		i++;
+		cout << endl << endl;
+	}
+}
+
+string listeCFCToString(vector<Maillon<Sommet<DonneesSommet>>*> listeCFC) {
+	ostringstream oss;
+	int i = 1;
+
+	for (Maillon<Sommet<DonneesSommet>>* liste : listeCFC) {
+		oss << "CFC " << i << ": " << endl;
+		oss << sommetToString(liste);
+		i++;
+		cout << endl << endl;
+	}
+
+	return oss.str();
+
+}
+
 
 int main2() {
 	
@@ -138,19 +176,19 @@ int main1() {
 
 	Graphe<DonneesArete, DonneesSommet> graph22;
 	DonneesArete a(1, 1);
+	Sommet<DonneesSommet> * s1 = graph22.creeSommet(DonneesSommet("s1"));
+	Sommet<DonneesSommet> * s2 = graph22.creeSommet(DonneesSommet("s2"));
+	Sommet<DonneesSommet> * s3 = graph22.creeSommet(DonneesSommet("s3"));
+	Sommet<DonneesSommet> * s4 = graph22.creeSommet(DonneesSommet("s4"));
+	Sommet<DonneesSommet> * s5 = graph22.creeSommet(DonneesSommet("s5"));
+	Sommet<DonneesSommet> * s6 = graph22.creeSommet(DonneesSommet("s6"));
+	Sommet<DonneesSommet> * s7 = graph22.creeSommet(DonneesSommet("s7"));
+	Sommet<DonneesSommet> * s8 = graph22.creeSommet(DonneesSommet("s8"));
+	Sommet<DonneesSommet> * s9 = graph22.creeSommet(DonneesSommet("s9"));
+	Sommet<DonneesSommet> * s10 = graph22.creeSommet(DonneesSommet("s10"));
+	Sommet<DonneesSommet> * s11 = graph22.creeSommet(DonneesSommet("s11"));
 
 	Sommet<DonneesSommet> * s12 = graph22.creeSommet(DonneesSommet("s12"));
-	Sommet<DonneesSommet> * s11 = graph22.creeSommet(DonneesSommet("s11"));
-	Sommet<DonneesSommet> * s10 = graph22.creeSommet(DonneesSommet("s10"));
-	Sommet<DonneesSommet> * s9 = graph22.creeSommet(DonneesSommet("s9"));
-	Sommet<DonneesSommet> * s8 = graph22.creeSommet(DonneesSommet("s8"));
-	Sommet<DonneesSommet> * s7 = graph22.creeSommet(DonneesSommet("s7"));
-	Sommet<DonneesSommet> * s6 = graph22.creeSommet(DonneesSommet("s6"));
-	Sommet<DonneesSommet> * s5 = graph22.creeSommet(DonneesSommet("s5"));
-	Sommet<DonneesSommet> * s4 = graph22.creeSommet(DonneesSommet("s4"));
-	Sommet<DonneesSommet> * s3 = graph22.creeSommet(DonneesSommet("s3"));
-	Sommet<DonneesSommet> * s2 = graph22.creeSommet(DonneesSommet("s2"));
-	Sommet<DonneesSommet> * s1 = graph22.creeSommet(DonneesSommet("s1"));
 
 	graph22.creeArete(a, s1, s2);
 	graph22.creeArete(a, s2, s1);
@@ -232,8 +270,7 @@ int main() {
 	unsigned** matriceFloyd = NULL;
 	bool presenceDeCycle = false;
 	unsigned(DonneesArete::*critere)(void);
-
-
+	vector<Maillon<Sommet<DonneesSommet>>*> listeCFC;
 	
 		while (!ok) {
 			try {
@@ -451,8 +488,16 @@ int main() {
 			system("cls");
 			break;
 
+		case 6:
+			listeCFC = traiteGraphe->composantesFortementConnexes();
+			afficheListeCFC(listeCFC);
+			sauvegarde(listeCFCToString(listeCFC), "Resultats\\listeCFC.txt");
+			system("pause");
+			system("cls");
+			break;
 		case 7:
-			afficheAretes(graphe->lAretes);
+			afficheArete(graphe->lAretes);
+			sauvegarde(areteToString(graphe->lAretes), "Resultats\\arete.txt");
 			system("pause");
 			system("cls");
 			break;

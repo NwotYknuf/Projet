@@ -17,10 +17,10 @@ s11  0  	0
 s12  0  	0
 
 sources
-s0
+s1
 
 puits
-p12
+s12
 
 sectionArcs
 arc1  s1  s2  0 0

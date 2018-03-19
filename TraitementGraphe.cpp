@@ -286,7 +286,7 @@ vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesFortementCo
 	libererToutSommet();
 
 	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);
-	unsigned ** matriceAdjacence = matriceAjdacence(&DonneesArete::getDistance);
+	unsigned ** matriceAdjacence = matriceAjdacence(&DonneesArete::estPresent);
 	unsigned** matriceFloyd = FloydWarshall(matriceAdjacence, n);
 
 	int i=0, j=0;
