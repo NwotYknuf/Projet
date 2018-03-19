@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void affiche(unsigned ** matrice, unsigned n) {
+void afficheMatrice(unsigned ** matrice, unsigned n) {
 	for (int i = 0; i < n; i++){
 		for (int j = 0; j < n; j++)	{
 			if (matrice[i][j] < TraitementGraphe::INFINI)
@@ -58,9 +58,9 @@ int main2() {
 	unsigned n = Maillon<Sommet<DonneesSommet>>::taille(graphTauro.lSommets);
 	unsigned ** matriceAdjacence = traiteTauro.matriceAjdacence(&DonneesArete::estPresent);
 	unsigned ** floyd = traiteTauro.FloydWarshall(matriceAdjacence, n);
-	affiche(matriceAdjacence, n);
+	afficheMatrice(matriceAdjacence, n);
 	cout << endl;
-	affiche(floyd, n);
+	afficheMatrice(floyd, n);
 	cout << endl << traiteTauro.diametre() << endl;
 
 	vector<Maillon<Sommet<DonneesSommet>>*> compConnexe = traiteTauro.composantesFortementConnexes();
@@ -129,7 +129,7 @@ int main1() {
 
 	vector<Maillon<Sommet<DonneesSommet>>*> compConnexe = traitement22.composantesFortementConnexes();
 
-	affiche(matrice, n);
+	afficheMatrice(matrice, n);
 	cout << endl << endl;
 	
 	for (Maillon<Sommet<DonneesSommet>>* liste : compConnexe) {
@@ -178,6 +178,7 @@ int main() {
 	Sommet<DonneesSommet>* sommet = NULL;
 	string choixSommet;
 	unsigned** matriceAdj = NULL;
+	unsigned** matriceFloyd = NULL;
 	bool presenceDeCycle = false;
 
 	while (!ok) {
@@ -209,8 +210,8 @@ int main() {
 				<< "2) Presence de cycles" << endl
 				<< "3) Afficher les sommets et leurs numerotations" << endl
 				<< "4) Matrice d'adjacence" << endl
-				<< "4) Matrice de Floyd/Warshall" << endl
-				<< "5) Composantes fortement connexe" << endl;
+				<< "5) Matrice de Floyd/Warshall" << endl
+				<< "6) Composantes fortement connexe" << endl;
 
 			cin >> choix;
 			if (!cin) {
@@ -328,7 +329,7 @@ int main() {
 				if (!cin) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					throw Erreur("Entrez un nombre entre 1 et 2");
+					throw Erreur("Entrez un nombre entre 1 et 3");
 				}
 			}
 			catch (Erreur e) {
@@ -336,10 +337,24 @@ int main() {
 				system("pause");
 			}
 		}
+
+		matriceAdj = traiteGraphe->matriceAjdacence();
+		cout << "Matrice adjacence: " << endl;
+		afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
 		break;
 	case 5:
+		matriceAdj = traiteGraphe->matriceAjdacence();
+		matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+
+		system("pause");
+		system("cls");
+		break;
+	case 6:
 		system("pause");
 		system("cls");
 		break;
 		}
+	
+
 	}
+
