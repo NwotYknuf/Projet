@@ -167,6 +167,7 @@ int main() {
 	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
 	TraitementGraphe traiteGraphe(graphe);
 	Maillon<Sommet<DonneesSommet>>* temp = NULL;
+	vector<string> lNoms = traiteGraphe.listeNomsSommets();
 
 	while (!ok) {
 		try {
@@ -256,7 +257,6 @@ int main() {
 
 		system("cls");
 		
-		vector<string> lNoms = traiteGraphe.listeNomsSommets();
 		Sommet<DonneesSommet>* sommet = NULL;
 
 		do {
@@ -275,8 +275,13 @@ int main() {
 		sommet = TraitementGraphe::trouverSommetParNom(graphe->lSommets, choixNomSommet);
 
 		if (choix == 1) {
-			if(choixAfficherTousChemins == 2){
-				traiteGraphe.pccDijkstra(sommet, DonneesArete::getDistance);
+			if (choixAfficherTousChemins == 2) {
+				traiteGraphe.pccDijkstra(sommet, &DonneesArete::getDistance);
+				afficheChemin(sommet);
+			}
+			if (choixAfficherTousChemins == 1) {
+
+			}
 		}
 
 
