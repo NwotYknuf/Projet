@@ -10,7 +10,6 @@ public:
 	string nom = "";
 	int x;
 	int y;
-	unsigned int numerotation = 0;
 	unsigned int numerotationPrefixe = 0;
 	unsigned int numerotationSuffixe = 0;
 

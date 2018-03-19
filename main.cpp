@@ -2,6 +2,7 @@
 #include "Chargement.h"
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 
 using namespace std;
@@ -12,16 +13,32 @@ void afficheMatrice(unsigned ** matrice, unsigned n) {
 			if (matrice[i][j] < TraitementGraphe::INFINI)
 				cout << matrice[i][j] << " , ";
 			else
-				cout << "I , ";
+				cout << "inf , ";
 		}
 		cout << endl;
 	}
 }
 
+string matriceToString(unsigned ** matrice, unsigned n) {
+
+	ostringstream oss;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (matrice[i][j] < TraitementGraphe::INFINI)
+				oss << matrice[i][j] << " , ";
+			else
+				oss << "inf , ";
+		}
+		oss << endl;
+	}
+	return oss.str();
+}
+
 void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
 	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
 	while (temp != NULL) {
-		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: ";
+		cout << "Sommet " << temp->valeur->info.nom << ";   numerotation prefixe: ";
 		cout << temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe;
 		cout << ";    source? " << temp->valeur->info.source ? "oui" : "non";
 		cout << ";   puit? " << temp->valeur->info.puit ? "oui" : "non";
@@ -37,6 +54,17 @@ void afficheAretes(Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes) {
 		cout << ";   cout: " << temp->valeur->info.distance << ";   duree: " << temp->valeur->info.duree << endl;
 		temp = temp->suivant;
 	}
+}
+
+string sommetToString(Maillon<Sommet<DonneesSommet>>* lSommets) {
+	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
+	ostringstream oss;
+	while (temp != NULL) {
+		oss << "Sommet " << temp->valeur->info.nom << ";   numerotation prefixe: "
+			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
+		temp = temp->suivant;
+	}
+	return oss.str();
 }
 
 void afficheChemin(Sommet<DonneesSommet> * s) {
@@ -337,7 +365,10 @@ int main() {
 			system("cls");
 			break;
 		case 3:
+			//Numerotation des sommets
+			traiteGraphe->NumeroteGraphe();
 			afficheSommets(graphe->lSommets);
+			sauvegarde(sommetToString(graphe->lSommets), "Resultats\\sommets.txt");
 			system("pause");
 			system("cls");
 			break;
@@ -374,7 +405,9 @@ int main() {
 			matriceAdj = traiteGraphe->matriceAjdacence(critere);
 			cout << "Matrice adjacence: " << endl;
 			afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
-
+			sauvegarde(matriceToString(matriceAdj,
+				Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets)),
+				"Resultats\\matriceAdjacence.txt");
 			system("pause");
 			system("cls");
 			break;
@@ -404,19 +437,16 @@ int main() {
 					system("pause");
 				}
 			}
-
+			
 			if (choix == 1) critere = &DonneesArete::getDistance;
 			else if (choix == 2) critere = &DonneesArete::getDuree;
 			else critere = &DonneesArete::estPresent;
 
 			matriceAdj = traiteGraphe->matriceAjdacence(critere);
 			matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
-
-			system("pause");
-			system("cls");
-			break;
-
-		case 6:
+			sauvegarde(matriceToString(matriceFloyd,
+				Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets)),
+				"Resultats\\matriceFloydWarshall.txt");
 			system("pause");
 			system("cls");
 			break;

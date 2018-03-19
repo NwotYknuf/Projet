@@ -1,0 +1,46 @@
+
+
+
+
+sectionSommets
+s1  0  	0
+s2  0  	0
+s3  0  	0
+s4  0  	0
+s5  0  	0
+s6  0  	0
+s7  0  	0
+s8  0  	0
+s9  0  	0
+s10  0  	0
+s11  0  	0
+s12  0  	0
+
+sources
+s0
+
+puits
+p12
+
+sectionArcs
+arc1  s1  s2  0 0
+arc2  s2  s1  0 0
+arc3  s3  s5  0 0
+arc4  s3  s7  0 0
+arc5  s4  s6  0 0
+arc6  s5  s4  0 0
+arc7  s5  s7  0 0
+arc8  s6  s5  0 0
+arc9  s6  s8  0 0
+arc10  s6  s10  0 0
+arc11  s7  s9  0 0
+arc12  s8  s7  0 0
+arc13  s8  s10  0 0
+arc14  s9  s8  0 0
+arc15  s11  s12  0 0
+arc16  s12  s11  0 0
+
+sectionGraphes
+
+
+
