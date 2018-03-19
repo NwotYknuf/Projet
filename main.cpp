@@ -2,6 +2,7 @@
 #include "Chargement.h"
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 
 using namespace std;
@@ -16,6 +17,22 @@ void afficheMatrice(unsigned ** matrice, unsigned n) {
 		}
 		cout << endl;
 	}
+}
+
+string matriceToString(unsigned ** matrice, unsigned n) {
+
+	ostringstream oss;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (matrice[i][j] < TraitementGraphe::INFINI)
+				oss << matrice[i][j] << " , ";
+			else
+				oss << "inf , ";
+		}
+		oss << endl;
+	}
+	return oss.str();
 }
 
 void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
