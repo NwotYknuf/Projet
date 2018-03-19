@@ -276,7 +276,7 @@ int main() {
 
 		if (choix == 1) {
 			if(choixAfficherTousChemins == 2){
-				traiteGraphe.pccDijkstra(graphe->lSommets->valeur, DonneesArete::getDistance);
+				traiteGraphe.pccDijkstra(sommet, DonneesArete::getDistance);
 		}
 
 
