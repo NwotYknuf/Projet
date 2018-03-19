@@ -190,6 +190,7 @@ int main() {
 	unsigned** matriceAdj = NULL;
 	unsigned** matriceFloyd = NULL;
 	bool presenceDeCycle = false;
+	unsigned(DonneesArete::*critere)(void);
 
 	while (!ok) {
 		try {
@@ -334,6 +335,7 @@ int main() {
 					<< "2) Duree" << endl
 					<< "3) Presence" << endl;
 
+				
 				cin >> choix;
 				if (!cin) {
 					cin.clear();
@@ -347,17 +349,55 @@ int main() {
 			}
 		}
 
-		matriceAdj = traiteGraphe->matriceAjdacence();
+		if(choix == 1) critere = &DonneesArete::getDistance;
+		else if(choix ==2) critere = &DonneesArete::getDuree;
+		else critere = &DonneesArete::estPresent;
+
+		matriceAdj = traiteGraphe->matriceAjdacence(critere);
 		cout << "Matrice adjacence: " << endl;
 		afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+
+		system("pause");
+		system("cls");
 		break;
+
 	case 5:
-		matriceAdj = traiteGraphe->matriceAjdacence();
+		choix = 0;
+		while (choix > 3 || choix < 1) {
+			try {
+
+				system("cls");
+				cout << "Plus court chemin" << endl
+					<< "Quel critere utiliser ?" << endl
+					<< "1) Cout" << endl
+					<< "2) Duree" << endl
+					<< "3) Presence" << endl;
+
+
+				cin >> choix;
+				if (!cin) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					throw Erreur("Entrez un nombre entre 1 et 3");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
+			}
+		}
+
+		if (choix == 1) critere = &DonneesArete::getDistance;
+		else if (choix == 2) critere = &DonneesArete::getDuree;
+		else critere = &DonneesArete::estPresent;
+
+		matriceAdj = traiteGraphe->matriceAjdacence(critere);
 		matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
 
 		system("pause");
 		system("cls");
 		break;
+
 	case 6:
 		system("pause");
 		system("cls");

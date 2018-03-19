@@ -61,4 +61,6 @@ public:
 
 	template<class Type>
 	bool valeurEstDansVector(vector<Type> conteneur, const Type& valeur);
+
+
 };
