@@ -17,6 +17,15 @@ void affiche(unsigned ** matrice, unsigned n) {
 	}
 }
 
+void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
+	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
+	while (temp != NULL) {
+		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: " 
+			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
+		temp = temp->suivant;
+	}
+}
+
 void afficheChemin(Sommet<DonneesSommet> * s) {
 	if (s == NULL)
 		cout << endl;
@@ -167,7 +176,9 @@ int main() {
 	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
 	TraitementGraphe traiteGraphe(graphe);
 	Maillon<Sommet<DonneesSommet>>* temp = NULL;
-	vector<string> lNoms = traiteGraphe.listeNomsSommets();
+	unsigned** matriceAdj = NULL;
+
+	bool presenceDeCycle = false;
 
 	while (!ok) {
 		try {
@@ -201,7 +212,7 @@ int main() {
 			cout << "Graphe charge avec succes" << endl
 				<< "1) Plus court chemin (temps ou cout) Dijkstra" << endl
 				<< "2) Presence de cycles" << endl
-				<< "3) Numeroter le graphe" << endl
+				<< "3) Afficher les sommets et leurs numerotations" << endl
 				<< "4) Matrice d'adjacence" << endl
 				<< "4) Matrice de Floyd/Warshall" << endl
 				<< "5) Composantes fortement connexe" << endl;
@@ -250,45 +261,60 @@ int main() {
 			}
 		}
 
-		do {
-			cout << "Voulez-vous: " << endl << "1) Afficher les plus courts chemins de tous les sommets" << endl << "2) Afficher les pcc d'un sommet choisi aux autres sommets" << endl;
-			cin >> choixAfficherTousChemins;
-		} while (choixAfficherTousChemins != 1 && choixAfficherTousChemins != 2);
-
-		system("cls");
 		
-		Sommet<DonneesSommet>* sommet = NULL;
-
-		do {
-			if (choixAfficherTousChemins == 2) {
-				cout << "Choisissez un sommet parmi: [";
-				while (temp != NULL) {
-					cout << temp->valeur << " ";
-					temp = temp->suivant;
-				}
-
-				cout << "]" << endl;
-				cin >> choixNomSommet;
-			}
-		} while (!traiteGraphe.valeurEstDansVector(lNoms, choixNomSommet));
-
-		sommet = TraitementGraphe::trouverSommetParNom(graphe->lSommets, choixNomSommet);
-
 		if (choix == 1) {
-			if (choixAfficherTousChemins == 2) {
-				traiteGraphe.pccDijkstra(sommet, &DonneesArete::getDistance);
-				afficheChemin(sommet);
-			}
-			if (choixAfficherTousChemins == 1) {
+			
+		}
+		if (choix == 2) {
 
+		}
+
+		break;
+	case 2:
+		presenceDeCycle = traiteGraphe.estSansCycle();
+		if (presenceDeCycle) cout << "Le graphe possède un cycle" << endl;
+		else cout << "Le graphe est sans cycle" << endl;
+		system("pause");
+		system("cls");
+		break;
+	case 3:
+		afficheSommets(graphe->lSommets);
+		system("pause");
+		system("cls");
+		break;
+	case 4:
+		choix = 0;
+		while (choix > 3 || choix < 1) {
+			try {
+
+				system("cls");
+				cout << "Plus court chemin" << endl
+					<< "Quel critere utiliser ?" << endl
+					<< "1) Cout" << endl
+					<< "2) Duree" << endl
+					<< "3) Presence" << endl;
+
+				cin >> choix;
+				if (!cin) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					throw Erreur("Entrez un nombre entre 1 et 2");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
 			}
 		}
 
 
-	case 2:
-	case 3:
-	case 4:
+
+		system("pause");
+		system("cls");
+		break;
 	case 5:
+		system("pause");
+		system("cls");
 		break;
 	}
 
