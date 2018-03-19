@@ -65,13 +65,6 @@ void TraitementGraphe::NumeroteGraphe(){
 	Maillon<Sommet<DonneesSommet>> * temp2;
 	int num = 0;
 
-	temp = graphe->lSommets;
-
-	while (temp != NULL) {
-		temp->valeur->info.numerotation = ++num;
-		temp = temp->suivant;
-	}
-
 	parcoursDFS(&TraitementGraphe::ordrePrefixeInverse, &TraitementGraphe::ordreSuffixeInverse);
 
 	int n = Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets);

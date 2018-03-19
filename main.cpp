@@ -13,7 +13,7 @@ void afficheMatrice(unsigned ** matrice, unsigned n) {
 			if (matrice[i][j] < TraitementGraphe::INFINI)
 				cout << matrice[i][j] << " , ";
 			else
-				cout << "I , ";
+				cout << "inf , ";
 		}
 		cout << endl;
 	}
@@ -38,10 +38,21 @@ string matriceToString(unsigned ** matrice, unsigned n) {
 void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
 	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
 	while (temp != NULL) {
-		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: " 
+		cout << "Sommet " << temp->valeur->info.nom << ";   numerotation prefixe: " 
 			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
 		temp = temp->suivant;
 	}
+}
+
+string sommetToString(Maillon<Sommet<DonneesSommet>>* lSommets) {
+	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
+	ostringstream oss;
+	while (temp != NULL) {
+		oss << "Sommet " << temp->valeur->info.nom << ";   numerotation prefixe: "
+			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
+		temp = temp->suivant;
+	}
+	return oss.str();
 }
 
 void afficheChemin(Sommet<DonneesSommet> * s) {
@@ -336,7 +347,10 @@ int main() {
 		system("cls");
 		break;
 	case 3:
+		//Numerotation des sommets
+		traiteGraphe->NumeroteGraphe();
 		afficheSommets(graphe->lSommets);
+		sauvegarde(sommetToString(graphe->lSommets), "Resultats\\sommets");
 		system("pause");
 		system("cls");
 		break;
@@ -373,7 +387,9 @@ int main() {
 		matriceAdj = traiteGraphe->matriceAjdacence(critere);
 		cout << "Matrice adjacence: " << endl;
 		afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
-
+		sauvegarde(matriceToString(matriceAdj, 
+			Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets)), 
+			"Resultats\\matriceAdjacence.txt");
 		system("pause");
 		system("cls");
 		break;
@@ -382,15 +398,13 @@ int main() {
 		choix = 0;
 		while (choix > 3 || choix < 1) {
 			try {
-
 				system("cls");
 				cout << "Plus court chemin" << endl
 					<< "Quel critere utiliser ?" << endl
 					<< "1) Cout" << endl
 					<< "2) Duree" << endl
 					<< "3) Presence" << endl;
-
-
+				
 				cin >> choix;
 				if (!cin) {
 					cin.clear();
@@ -410,6 +424,11 @@ int main() {
 
 		matriceAdj = traiteGraphe->matriceAjdacence(critere);
 		matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+
+		afficheMatrice(matriceFloyd, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+		sauvegarde(matriceToString(matriceFloyd,
+			Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets)),
+			"Resultats\\matriceFloydWarshall.txt");
 
 		system("pause");
 		system("cls");

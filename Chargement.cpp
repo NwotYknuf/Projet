@@ -79,15 +79,14 @@ int Chargement::trouverLigneCommencantParS(const string& s, const string& chemin
 }
 
 Graphe<DonneesArete, DonneesSommet> * Chargement::charger(const string& chemin) {
-	Maillon<Sommet<DonneesSommet>>* listeSommets = Chargement::chargerSommetGPR(chemin);
-	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = Chargement::chargerAreteGPR(chemin, listeSommets);
-	Graphe<DonneesArete, DonneesSommet> * graphe = new Graphe<DonneesArete, DonneesSommet>(listeSommets, lAretes);
+	Graphe<DonneesArete, DonneesSommet> * graphe = new Graphe<DonneesArete, DonneesSommet>();
+	Chargement::chargerSommetGPR(chemin, graphe);
+	Chargement::chargerAreteGPR(chemin, graphe);
 	return graphe;
 }
 
-Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemin) {
+void Chargement::chargerSommetGPR(const string& chemin, Graphe<DonneesArete, DonneesSommet> * graph) {
 	ifstream file(chemin, ios::in);
-	Maillon<Sommet<DonneesSommet>>* listeSommets = NULL;
 
 	if (file) {
 		string line;
@@ -107,8 +106,7 @@ Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemi
 				split(line, " ", ligneSplit);
 				Chargement::erase(ligneSplit, "");
 				DonneesSommet infoSommet(ligneSplit[0], stoi(ligneSplit[1]), stoi(ligneSplit[2]));
-				Sommet<DonneesSommet>* s = new Sommet<DonneesSommet>(infoSommet);
-				listeSommets = new Maillon<Sommet<DonneesSommet>>(s, listeSommets);
+				graph->creeSommet(infoSommet);
 				ligneSplit.clear();
 			}
 			if (numeroLigneCourante >= sources - 1) file.seekg(0, ios::end);
@@ -118,14 +116,11 @@ Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemi
 	}
 	else
 		throw Erreur("Impossible d'ouvrir le fichier !");
-	return listeSommets;
 }
 
-Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets) {
+void Chargement::chargerAreteGPR(const string& chemin, Graphe<DonneesArete, DonneesSommet> * graph) {
 	ifstream file(chemin, ios::in);
 	
-	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = NULL;
-
 	if (file) {
 		string line2;
 		vector<string> ligneSplit;
@@ -146,22 +141,15 @@ Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const s
 				split(line2, " ", ligneSplit);
 				Chargement::erase(ligneSplit, "");
 				try {
-					debut = TraitementGraphe::trouverSommetParNom(lSommets,ligneSplit[1]);
-				}
-				catch (Erreur e) {
-					cerr << e << endl;
-				}
-
-				try {
-					fin = TraitementGraphe::trouverSommetParNom(lSommets, ligneSplit[2]);
+					debut = TraitementGraphe::trouverSommetParNom(graph->lSommets,ligneSplit[1]);
+					fin = TraitementGraphe::trouverSommetParNom(graph->lSommets, ligneSplit[2]);
 				}
 				catch (Erreur e) {
 					cerr << e << endl;
 				}
 
 				DonneesArete infoArete(ligneSplit[0], stoi(ligneSplit[3]), stoi(ligneSplit[4]));
-				Arete<DonneesArete, DonneesSommet>* arete = new Arete<DonneesArete, DonneesSommet>(infoArete, debut, fin);
-				lAretes = new Maillon<Arete<DonneesArete,DonneesSommet>>(arete, lAretes);
+				graph->creeArete(infoArete, debut, fin);				
  				ligneSplit.clear();
 			}
 			if (numeroLigneCourante >= sectionGraphes - 1) file.seekg(0, ios::end);
@@ -173,5 +161,4 @@ Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const s
 
 	else 
 		throw Erreur("Impossible d'ouvrir le fichier !");
-	return lAretes;
 }

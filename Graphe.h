@@ -180,7 +180,7 @@ Maillon< Sommet<infoSommet> > *  Graphe<infoArete, infoSommet>::sommetsAdjacents
 	for (l = ladj, r = NULL; l; l = l->suivant)
 		r = new Maillon< Sommet<infoSommet> >(l->valeur->first, r);
 
-	Maillon< pair< Sommet<infoSommet> *, Arete<infoArete, infoSommet>* > >::effaceObjets(ladj);
+	Maillon< pair< Sommet<infoSommet> *, Arete<infoArete, infoSommet>* > >::effacePointeurs(ladj);
 
 	return r;
 }
