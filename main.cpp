@@ -272,6 +272,33 @@ int main() {
 		else {
 			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
 		}
+
+
+		sommet = NULL;
+		ok = false;
+
+		while (sommet == NULL || !ok) {
+			try {
+				system("cls");
+				cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
+
+				cin >> choixSommet;
+
+				if (choixSommet == "q")
+					ok = true;
+				else {
+					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
+
+					afficheChemin(sommet);
+					system("pause");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
+			}
+		}
+
 			break;
 	case 2:
 		presenceDeCycle = traiteGraphe->estSansCycle();
@@ -302,31 +329,6 @@ int main() {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					throw Erreur("Entrez un nombre entre 1 et 2");
-				}
-			}
-			catch (Erreur e) {
-				cout << e << endl;
-				system("pause");
-			}
-		}
-
-		sommet = NULL;
-		ok = false;
-
-		while (sommet == NULL || !ok) {
-			try {
-				system("cls");
-				cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
-
-				cin >> choixSommet;
-
-				if (choixSommet == "q")
-					ok = true;
-				else {
-					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
-
-					afficheChemin(sommet);
-					system("pause");
 				}
 			}
 			catch (Erreur e) {
