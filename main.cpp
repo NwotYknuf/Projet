@@ -1,4 +1,5 @@
 #include "TraitementGraphe.h"
+#include "Chargement.h"
 #include <string>
 #include <iostream>
 
@@ -16,7 +17,7 @@ void affiche(unsigned ** matrice, unsigned n) {
 	}
 }
 
-int main() {
+int main2() {
 	
 	Graphe<DonneesArete, DonneesSommet> graphTauro;
 	DonneesArete a(1, 1);
@@ -129,4 +130,11 @@ int main1() {
 	system("pause");
 
 	return 0;
+}
+
+int main() {
+	Graphe<DonneesArete, DonneesSommet>* grapheCharge;
+	grapheCharge = Chargement::charger("GrapheFormatGPR/Ex3.gpr");
+	cout << *(grapheCharge) << endl;
+	system("pause");
 }

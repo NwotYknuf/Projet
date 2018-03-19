@@ -47,6 +47,8 @@ public:
 
 	Graphe() : lSommets(NULL), lAretes(NULL) {}
 
+	Graphe(Maillon< Sommet<infoSommet> >* _lSommets, Maillon< Arete<infoArete, infoSommet> >* _lAretes):lSommets(_lSommets), lAretes(_lAretes){}
+
 	Graphe(const Graphe<infoArete, infoSommet> & graphe) : Graphe() { this->copie(graphe); }
 
 	const Graphe<infoArete, infoSommet> & operator = (const Graphe<infoArete, infoSommet> & graphe) { this->effaceTout(); this->copie(graphe); return *this; }

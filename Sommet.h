@@ -14,6 +14,8 @@ int degre;
 bool marque;
 infoSommet info;
 
+Sommet(){}
+
 Sommet(const infoSommet & v) : info(v), degre(0), marque(false) { }
 
 operator string () const;
