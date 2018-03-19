@@ -2,6 +2,7 @@
 #include "Chargement.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -33,6 +34,16 @@ void afficheChemin(Sommet<DonneesSommet> * s) {
 		cout << s->info.nom << ", ";
 		afficheChemin(s->info.pere);
 	}
+}
+
+void sauvegarde(string aff, string path) {
+	ofstream fichier(path, ios::trunc);
+	if (fichier) {
+		fichier << aff;
+		fichier.close();
+	}
+	else
+		throw Erreur("Impossible de creer le fichier");
 }
 
 int main2() {
@@ -171,7 +182,6 @@ int main3() {
 int main() {
 
 	//Chargement
-
 	bool ok = false;
 	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
 	TraitementGraphe * traiteGraphe = NULL;
@@ -196,8 +206,7 @@ int main() {
 			cout << e << endl << endl;
 		}
 	}
-
-
+	
 	//main menu
 	int choix = 0;
 
@@ -229,9 +238,9 @@ int main() {
 
 	switch (choix) {
 	case 1:
-
+		//PCC
 		choix = 0;
-
+		//Critere
 		while (choix > 2 || choix < 1) {
 			try {
 				system("cls");
@@ -252,7 +261,7 @@ int main() {
 				system("pause");
 			}
 		}
-
+		//Sommet de depart
 		while (sommet == NULL) {
 			try {
 				system("cls");
@@ -265,7 +274,7 @@ int main() {
 				system("pause");
 			}
 		}
-
+	
 		if (choix == 1) {
 			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDistance);
 		}
@@ -273,10 +282,9 @@ int main() {
 			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
 		}
 
-
 		sommet = NULL;
 		ok = false;
-
+		//Sommet pour afficher chemin
 		while (sommet == NULL || !ok) {
 			try {
 				system("cls");
@@ -298,11 +306,12 @@ int main() {
 				system("pause");
 			}
 		}
-
 			break;
+
 	case 2:
+		//Presence de cycle
 		presenceDeCycle = traiteGraphe->estSansCycle();
-		if (presenceDeCycle) cout << "Le graphe possède un cycle" << endl;
+		if (presenceDeCycle) cout << "Le graphe possede un cycle" << endl;
 		else cout << "Le graphe est sans cycle" << endl;
 		system("pause");
 		system("cls");
