@@ -17,6 +17,15 @@ void affiche(unsigned ** matrice, unsigned n) {
 	}
 }
 
+void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
+	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
+	while (temp != NULL) {
+		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: " 
+			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
+		temp = temp->suivant;
+	}
+}
+
 void afficheChemin(Sommet<DonneesSommet> * s) {
 	if (s == NULL)
 		cout << endl;
@@ -164,10 +173,12 @@ int main() {
 	//Chargement
 
 	bool ok = false;
-	Graphe<DonneesArete, DonneesSommet>* graphe;
-	TraitementGraphe * traiteGraphe;
+	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
+	TraitementGraphe * traiteGraphe = NULL;
 	Sommet<DonneesSommet>* sommet = NULL;
 	string choixSommet;
+	unsigned** matriceAdj = NULL;
+	bool presenceDeCycle = false;
 
 	while (!ok) {
 		try {
@@ -196,7 +207,7 @@ int main() {
 			cout << "Graphe charge avec succes" << endl
 				<< "1) Plus court chemin (temps ou cout) Dijkstra" << endl
 				<< "2) Presence de cycles" << endl
-				<< "3) Numeroter le graphe" << endl
+				<< "3) Afficher les sommets et leurs numerotations" << endl
 				<< "4) Matrice d'adjacence" << endl
 				<< "4) Matrice de Floyd/Warshall" << endl
 				<< "5) Composantes fortement connexe" << endl;
@@ -242,7 +253,7 @@ int main() {
 			}
 		}
 
-		while (sommet == NULL){
+		while (sommet == NULL) {
 			try {
 				system("cls");
 				cout << "Entrez le nom du sommet de depart : " << endl;
@@ -251,6 +262,7 @@ int main() {
 			}
 			catch (Erreur e) {
 				cout << e << endl;
+				system("pause");
 			}
 		}
 
@@ -260,6 +272,43 @@ int main() {
 		else {
 			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
 		}
+			break;
+	case 2:
+		presenceDeCycle = traiteGraphe->estSansCycle();
+		if (presenceDeCycle) cout << "Le graphe possède un cycle" << endl;
+		else cout << "Le graphe est sans cycle" << endl;
+		system("pause");
+		system("cls");
+		break;
+	case 3:
+		afficheSommets(graphe->lSommets);
+		system("pause");
+		system("cls");
+		break;
+	case 4:
+		choix = 0;
+		while (choix > 3 || choix < 1) {
+			try {
+
+				system("cls");
+				cout << "Plus court chemin" << endl
+					<< "Quel critere utiliser ?" << endl
+					<< "1) Cout" << endl
+					<< "2) Duree" << endl
+					<< "3) Presence" << endl;
+
+				cin >> choix;
+				if (!cin) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					throw Erreur("Entrez un nombre entre 1 et 2");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
+			}
+		}
 
 		sommet = NULL;
 		ok = false;
@@ -268,14 +317,14 @@ int main() {
 			try {
 				system("cls");
 				cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
-			
+
 				cin >> choixSommet;
 
 				if (choixSommet == "q")
 					ok = true;
 				else {
 					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
-					
+
 					afficheChemin(sommet);
 					system("pause");
 				}
@@ -286,15 +335,9 @@ int main() {
 			}
 		}
 		break;
-	case 2:
-	case 3:
-	case 4:
 	case 5:
+		system("pause");
+		system("cls");
 		break;
+		}
 	}
-
-
-
-
-}
-
