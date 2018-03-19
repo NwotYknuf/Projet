@@ -41,6 +41,13 @@ void inline TraitementGraphe::parcoursDFS(Traitement traitementPrefixe, Traiteme
 	}
 }
 
+template<class Type>
+bool TraitementGraphe::valeurEstDansVector(vector<Type> conteneur, const Type& valeur)
+{
+	auto iterator = find(conteneur.begin(), conteneur.end(), valeur);
+	return (iterator != conteneur.end());
+}
+
 void TraitementGraphe::affiche(Sommet<DonneesSommet>* sommet){
 	cout << *sommet;
 }
@@ -347,3 +354,16 @@ Sommet<DonneesSommet>* TraitementGraphe::trouverSommetParNom(Maillon<Sommet<Donn
 	throw Erreur("Aucun sommet ne porte ce nom");
 
 }
+
+vector<string> TraitementGraphe::listeNomsSommets()
+{
+	vector<string> lNoms;
+	Maillon<Sommet<DonneesSommet>>* temp = graphe->lSommets;
+	while (temp != NULL) {
+		lNoms.push_back(temp->valeur->info.nom);
+		temp = temp->suivant;
+	}
+	return lNoms;
+}
+
+

@@ -56,4 +56,9 @@ public:
 	bool estSansCycle();
 
 	static Sommet<DonneesSommet>* trouverSommetParNom(Maillon<Sommet<DonneesSommet>>*  lSommet, const string& nom);
+
+	vector<string> listeNomsSommets();
+
+	template<class Type>
+	bool valeurEstDansVector(vector<Type> conteneur, const Type& valeur);
 };
