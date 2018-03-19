@@ -164,10 +164,10 @@ int main() {
 	//Chargement
 
 	bool ok = false;
-	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
-	TraitementGraphe traiteGraphe(graphe);
-	Maillon<Sommet<DonneesSommet>>* temp = NULL;
-	vector<string> lNoms = traiteGraphe.listeNomsSommets();
+	Graphe<DonneesArete, DonneesSommet>* graphe;
+	TraitementGraphe * traiteGraphe;
+	Sommet<DonneesSommet>* sommet = NULL;
+	string choixSommet;
 
 	while (!ok) {
 		try {
@@ -177,9 +177,7 @@ int main() {
 			cin >> nom;
 
 			graphe = Chargement::charger(chemin + nom);
-			TraitementGraphe traiteGraphe(graphe);
-			temp = graphe->lSommets;
-
+			traiteGraphe = new TraitementGraphe(graphe);
 			ok = true;
 
 		}
@@ -191,9 +189,6 @@ int main() {
 
 	//main menu
 	int choix = 0;
-	int choixAfficherTousChemins = 0;
-	string choixNomSommet = "";
-
 
 	while (choix > 5 || choix < 1) {
 		try {
@@ -211,7 +206,6 @@ int main() {
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				throw Erreur("Entrez un nombre entre 1 et 5");
-
 			}
 
 		}
@@ -229,8 +223,6 @@ int main() {
 
 		while (choix > 2 || choix < 1) {
 			try {
-				system("cls");
-
 				system("cls");
 				cout << "Plus court chemin" << endl
 					<< "Quel critere utiliser ?" << endl
@@ -250,41 +242,50 @@ int main() {
 			}
 		}
 
-		do {
-			cout << "Voulez-vous: " << endl << "1) Afficher les plus courts chemins de tous les sommets" << endl << "2) Afficher les pcc d'un sommet choisi aux autres sommets" << endl;
-			cin >> choixAfficherTousChemins;
-		} while (choixAfficherTousChemins != 1 && choixAfficherTousChemins != 2);
-
-		system("cls");
-		
-		Sommet<DonneesSommet>* sommet = NULL;
-
-		do {
-			if (choixAfficherTousChemins == 2) {
-				cout << "Choisissez un sommet parmi: [";
-				while (temp != NULL) {
-					cout << temp->valeur << " ";
-					temp = temp->suivant;
-				}
-
-				cout << "]" << endl;
-				cin >> choixNomSommet;
+		while (sommet == NULL){
+			try {
+				system("cls");
+				cout << "Entrez le nom du sommet de depart : " << endl;
+				cin >> choixSommet;
+				sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
 			}
-		} while (!traiteGraphe.valeurEstDansVector(lNoms, choixNomSommet));
-
-		sommet = TraitementGraphe::trouverSommetParNom(graphe->lSommets, choixNomSommet);
-
-		if (choix == 1) {
-			if (choixAfficherTousChemins == 2) {
-				traiteGraphe.pccDijkstra(sommet, &DonneesArete::getDistance);
-				afficheChemin(sommet);
-			}
-			if (choixAfficherTousChemins == 1) {
-
+			catch (Erreur e) {
+				cout << e << endl;
 			}
 		}
 
+		if (choix == 1) {
+			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDistance);
+		}
+		else {
+			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
+		}
 
+		sommet = NULL;
+		ok = false;
+
+		while (sommet == NULL || !ok) {
+			try {
+				system("cls");
+				cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
+			
+				cin >> choixSommet;
+
+				if (choixSommet == "q")
+					ok = true;
+				else {
+					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
+					
+					afficheChemin(sommet);
+					system("pause");
+				}
+			}
+			catch (Erreur e) {
+				cout << e << endl;
+				system("pause");
+			}
+		}
+		break;
 	case 2:
 	case 3:
 	case 4:
