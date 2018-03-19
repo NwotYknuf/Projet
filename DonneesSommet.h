@@ -19,10 +19,13 @@ public:
 	static const unsigned OUVERT;
 	static const unsigned FERME;
 
+
 	Sommet<DonneesSommet> * pere;
 	unsigned cout;
 	unsigned etat;
 
+	unsigned etiquette[2];
+	
 	//Circuits
 	unsigned degreEntrant = 0;
 

@@ -13,5 +13,5 @@ public:
 	static void erase(vector<string>& v, string str);
 	static Maillon<Sommet<DonneesSommet>>* chargerSommetGPR(const string& chemin);
 	static Maillon<Arete<DonneesArete, DonneesSommet>>* chargerAreteGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets);
-	static void chargerSourceGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets);
+	static void chargerSourceOuPuitGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets, const string& sourceOuPuit);
 };

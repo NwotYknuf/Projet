@@ -82,6 +82,8 @@ Graphe<DonneesArete, DonneesSommet> * Chargement::charger(const string& chemin) 
 	Maillon<Sommet<DonneesSommet>>* listeSommets = Chargement::chargerSommetGPR(chemin);
 	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = Chargement::chargerAreteGPR(chemin, listeSommets);
 	Graphe<DonneesArete, DonneesSommet> * graphe = new Graphe<DonneesArete, DonneesSommet>(listeSommets, lAretes);
+	chargerSourceOuPuitGPR(chemin, listeSommets, "sources");
+	chargerSourceOuPuitGPR(chemin, listeSommets, "puits");
 	return graphe;
 }
 
@@ -119,6 +121,37 @@ Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemi
 	else
 		throw Erreur("Impossible d'ouvrir le fichier !");
 	return listeSommets;
+}
+
+void Chargement::chargerSourceOuPuitGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets, const string& sourceOuPuit) {
+	ifstream file(chemin, ios::in);
+
+	if (file) {
+		string line;
+		vector<string> ligneSplit;
+		int numeroLigneCourante = 1;
+		Sommet<DonneesSommet> *sommetSource = NULL;
+
+		int sources = 0;
+
+		sources = Chargement::trouverLigneCommencantParS(sourceOuPuit, chemin);
+		sources++;
+
+		while (getline(file, line)) {
+			if (numeroLigneCourante == sources) {
+				split(line, " ", ligneSplit);
+				Chargement::erase(ligneSplit, "");
+				sommetSource = TraitementGraphe::trouverSommetParNom(lSommets, ligneSplit[0]);
+				if (sourceOuPuit == "sources") sommetSource->info.source = true;
+				if (sourceOuPuit == "puits") sommetSource->info.puit = true;
+			}
+			if (numeroLigneCourante > sources) file.seekg(0, ios::end);
+			numeroLigneCourante++;
+		}
+
+	}
+	else
+		throw Erreur("Impossible d'ouvrir le fichier !");
 }
 
 Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets) {
@@ -175,3 +208,4 @@ Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const s
 		throw Erreur("Impossible d'ouvrir le fichier !");
 	return lAretes;
 }
+

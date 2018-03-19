@@ -21,8 +21,20 @@ void afficheMatrice(unsigned ** matrice, unsigned n) {
 void afficheSommets(Maillon<Sommet<DonneesSommet>>* lSommets) {
 	Maillon<Sommet<DonneesSommet>>* temp = lSommets;
 	while (temp != NULL) {
-		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: " 
-			<< temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe << endl;
+		cout << "Sommet " << temp->valeur->info.nom << ";   numero: " << temp->valeur->info.numerotation << ";   numerotation prefixe: ";
+		cout << temp->valeur->info.numerotationPrefixe << ";    numerotation suffixe: " << temp->valeur->info.numerotationSuffixe;
+		cout << ";    source? " << temp->valeur->info.source ? "oui" : "non";
+		cout << ";   puit? " << temp->valeur->info.puit ? "oui" : "non";
+		cout << endl;
+		temp = temp->suivant;
+	}
+}
+
+void afficheAretes(Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes) {
+	Maillon<Arete<DonneesArete, DonneesSommet>>* temp = lAretes;
+	while (temp != NULL) {
+		cout << "Arcs " << temp->valeur->info.name << ";  debut: " << temp->valeur->debut->info.nom << ";   fin: " << temp->valeur->fin->info.nom;
+		cout << ";   cout: " << temp->valeur->info.distance << ";   duree: " << temp->valeur->info.duree << endl;
 		temp = temp->suivant;
 	}
 }
@@ -183,6 +195,7 @@ int main() {
 
 	//Chargement
 	bool ok = false;
+	bool termine = false;
 	Graphe<DonneesArete, DonneesSommet>* graphe = NULL;
 	TraitementGraphe * traiteGraphe = NULL;
 	Sommet<DonneesSommet>* sommet = NULL;
@@ -192,218 +205,235 @@ int main() {
 	bool presenceDeCycle = false;
 	unsigned(DonneesArete::*critere)(void);
 
-	while (!ok) {
-		try {
-			cout << "Entrez le nom du fichier gpr a charger : " << endl;
-			string chemin = "GrapheFormatGPR/";
-			string nom;
-			cin >> nom;
 
-			graphe = Chargement::charger(chemin + nom);
-			traiteGraphe = new TraitementGraphe(graphe);
-			ok = true;
-
-		}
-		catch (Erreur e) {
-			cout << e << endl << endl;
-		}
-	}
 	
-	//main menu
-	int choix = 0;
+		while (!ok) {
+			try {
+				cout << "Entrez le nom du fichier gpr a charger : " << endl;
+				string chemin = "GrapheFormatGPR/";
+				string nom;
+				cin >> nom;
 
-	while (choix > 5 || choix < 1) {
-		try {
-			system("cls");
-			cout << "Graphe charge avec succes" << endl
-				<< "1) Plus court chemin (temps ou cout) Dijkstra" << endl
-				<< "2) Presence de cycles" << endl
-				<< "3) Afficher les sommets et leurs numerotations" << endl
-				<< "4) Matrice d'adjacence" << endl
-				<< "5) Matrice de Floyd/Warshall" << endl
-				<< "6) Composantes fortement connexe" << endl;
+				graphe = Chargement::charger(chemin + nom);
+				traiteGraphe = new TraitementGraphe(graphe);
+				ok = true;
 
-			cin >> choix;
-			if (!cin) {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				throw Erreur("Entrez un nombre entre 1 et 5");
 			}
-
-		}
-		catch (Erreur e) {
-			cout << e << endl;
-			system("pause");
+			catch (Erreur e) {
+				cout << e << endl << endl;
+			}
 		}
 
-	}
-
-	switch (choix) {
-	case 1:
-		//PCC
-		choix = 0;
-		//Critere
-		while (choix > 2 || choix < 1) {
+		//main menu
+		
+	do{
+		int choix = 0;
+		while (choix > 8 || choix < 1) {
 			try {
 				system("cls");
-				cout << "Plus court chemin" << endl
-					<< "Quel critere utiliser ?" << endl
-					<< "1) Cout" << endl
-					<< "2) Duree" << endl;
+				cout << "Graphe charge avec succes" << endl
+					<< "1) Plus court chemin (temps ou cout) Dijkstra" << endl
+					<< "2) Presence de cycles" << endl
+					<< "3) Afficher les sommets et leurs numerotations" << endl
+					<< "4) Matrice d'adjacence" << endl
+					<< "5) Matrice de Floyd/Warshall" << endl
+					<< "6) Composantes fortements connexes" << endl
+					<< "7) Afficher les aretes" << endl
+					<< "8) Quitter" << endl;
 
 				cin >> choix;
 				if (!cin) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					throw Erreur("Entrez un nombre entre 1 et 2");
+					throw Erreur("Entrez un nombre entre 1 et 5");
 				}
+
 			}
 			catch (Erreur e) {
 				cout << e << endl;
 				system("pause");
 			}
-		}
-		//Sommet de depart
-		while (sommet == NULL) {
-			try {
-				system("cls");
-				cout << "Entrez le nom du sommet de depart : " << endl;
-				cin >> choixSommet;
-				sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
-			}
-			catch (Erreur e) {
-				cout << e << endl;
-				system("pause");
-			}
-		}
-	
-		if (choix == 1) {
-			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDistance);
-		}
-		else {
-			traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
+
 		}
 
-		sommet = NULL;
-		ok = false;
-		//Sommet pour afficher chemin
-		while (sommet == NULL || !ok) {
-			try {
-				system("cls");
-				cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
+		switch (choix) {
+		case 1:
+			//PCC
+			choix = 0;
+			//Critere
+			while (choix > 2 || choix < 1) {
+				try {
+					system("cls");
+					cout << "Plus court chemin" << endl
+						<< "Quel critere utiliser ?" << endl
+						<< "1) Cout" << endl
+						<< "2) Duree" << endl;
 
-				cin >> choixSommet;
-
-				if (choixSommet == "q")
-					ok = true;
-				else {
-					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
-
-					afficheChemin(sommet);
+					cin >> choix;
+					if (!cin) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						throw Erreur("Entrez un nombre entre 1 et 2");
+					}
+				}
+				catch (Erreur e) {
+					cout << e << endl;
 					system("pause");
 				}
 			}
-			catch (Erreur e) {
-				cout << e << endl;
-				system("pause");
+			//Sommet de depart
+			while (sommet == NULL) {
+				try {
+					system("cls");
+					cout << "Entrez le nom du sommet de depart : " << endl;
+					cin >> choixSommet;
+					sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
+				}
+				catch (Erreur e) {
+					cout << e << endl;
+					system("pause");
+				}
 			}
-		}
+
+			if (choix == 1) {
+				traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDistance);
+			}
+			else {
+				traiteGraphe->pccDijkstra(sommet, &DonneesArete::getDuree);
+			}
+
+			sommet = NULL;
+			ok = false;
+			//Sommet pour afficher chemin
+			while (sommet == NULL || !ok) {
+				try {
+					system("cls");
+					cout << "Entrez le nom d'un sommet pour afficher son chemin ou 'q' pour retourner au menu principale : " << endl;
+
+					cin >> choixSommet;
+
+					if (choixSommet == "q")
+						ok = true;
+					else {
+						sommet = traiteGraphe->trouverSommetParNom(graphe->lSommets, choixSommet);
+
+						afficheChemin(sommet);
+						system("pause");
+					}
+				}
+				catch (Erreur e) {
+					cout << e << endl;
+					system("pause");
+				}
+			}
 			break;
 
-	case 2:
-		//Presence de cycle
-		presenceDeCycle = traiteGraphe->estSansCycle();
-		if (presenceDeCycle) cout << "Le graphe possede un cycle" << endl;
-		else cout << "Le graphe est sans cycle" << endl;
-		system("pause");
-		system("cls");
-		break;
-	case 3:
-		afficheSommets(graphe->lSommets);
-		system("pause");
-		system("cls");
-		break;
-	case 4:
-		choix = 0;
-		while (choix > 3 || choix < 1) {
-			try {
+		case 2:
+			//Presence de cycle
+			presenceDeCycle = traiteGraphe->estSansCycle();
+			if (presenceDeCycle) cout << "Le graphe possede un cycle" << endl;
+			else cout << "Le graphe est sans cycle" << endl;
+			system("pause");
+			system("cls");
+			break;
+		case 3:
+			afficheSommets(graphe->lSommets);
+			system("pause");
+			system("cls");
+			break;
+		case 4:
+			choix = 0;
+			while (choix > 3 || choix < 1) {
+				try {
 
-				system("cls");
-				cout << "Plus court chemin" << endl
-					<< "Quel critere utiliser ?" << endl
-					<< "1) Cout" << endl
-					<< "2) Duree" << endl
-					<< "3) Presence" << endl;
+					system("cls");
+					cout << "Plus court chemin" << endl
+						<< "Quel critere utiliser ?" << endl
+						<< "1) Cout" << endl
+						<< "2) Duree" << endl
+						<< "3) Presence" << endl;
 
-				
-				cin >> choix;
-				if (!cin) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					throw Erreur("Entrez un nombre entre 1 et 3");
+
+					cin >> choix;
+					if (!cin) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						throw Erreur("Entrez un nombre entre 1 et 3");
+					}
+				}
+				catch (Erreur e) {
+					cout << e << endl;
+					system("pause");
 				}
 			}
-			catch (Erreur e) {
-				cout << e << endl;
-				system("pause");
-			}
-		}
 
-		if(choix == 1) critere = &DonneesArete::getDistance;
-		else if(choix ==2) critere = &DonneesArete::getDuree;
-		else critere = &DonneesArete::estPresent;
+			if (choix == 1) critere = &DonneesArete::getDistance;
+			else if (choix == 2) critere = &DonneesArete::getDuree;
+			else critere = &DonneesArete::estPresent;
 
-		matriceAdj = traiteGraphe->matriceAjdacence(critere);
-		cout << "Matrice adjacence: " << endl;
-		afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+			matriceAdj = traiteGraphe->matriceAjdacence(critere);
+			cout << "Matrice adjacence: " << endl;
+			afficheMatrice(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
 
-		system("pause");
-		system("cls");
-		break;
+			system("pause");
+			system("cls");
+			break;
 
-	case 5:
-		choix = 0;
-		while (choix > 3 || choix < 1) {
-			try {
+		case 5:
+			choix = 0;
+			while (choix > 3 || choix < 1) {
+				try {
 
-				system("cls");
-				cout << "Plus court chemin" << endl
-					<< "Quel critere utiliser ?" << endl
-					<< "1) Cout" << endl
-					<< "2) Duree" << endl
-					<< "3) Presence" << endl;
+					system("cls");
+					cout << "Plus court chemin" << endl
+						<< "Quel critere utiliser ?" << endl
+						<< "1) Cout" << endl
+						<< "2) Duree" << endl
+						<< "3) Presence" << endl;
 
 
-				cin >> choix;
-				if (!cin) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					throw Erreur("Entrez un nombre entre 1 et 3");
+					cin >> choix;
+					if (!cin) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						throw Erreur("Entrez un nombre entre 1 et 3");
+					}
+				}
+				catch (Erreur e) {
+					cout << e << endl;
+					system("pause");
 				}
 			}
-			catch (Erreur e) {
-				cout << e << endl;
-				system("pause");
-			}
+
+			if (choix == 1) critere = &DonneesArete::getDistance;
+			else if (choix == 2) critere = &DonneesArete::getDuree;
+			else critere = &DonneesArete::estPresent;
+
+			matriceAdj = traiteGraphe->matriceAjdacence(critere);
+			matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+
+			system("pause");
+			system("cls");
+			break;
+
+		case 6:
+			system("pause");
+			system("cls");
+			break;
+
+		case 7:
+			afficheAretes(graphe->lAretes);
+			system("pause");
+			system("cls");
+			break;
+		case 8:
+			termine = true;
+			break;
 		}
+		
 
-		if (choix == 1) critere = &DonneesArete::getDistance;
-		else if (choix == 2) critere = &DonneesArete::getDuree;
-		else critere = &DonneesArete::estPresent;
-
-		matriceAdj = traiteGraphe->matriceAjdacence(critere);
-		matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
-
-		system("pause");
-		system("cls");
-		break;
-
-	case 6:
-		system("pause");
-		system("cls");
-		break;
-		}
+	}while (!termine);
 	
 
-	}
+}
 
