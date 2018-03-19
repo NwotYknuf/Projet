@@ -134,7 +134,13 @@ int main1() {
 
 int main() {
 	Graphe<DonneesArete, DonneesSommet>* grapheCharge;
+	cout << "chargement..." << endl;
 	grapheCharge = Chargement::charger("GrapheFormatGPR/Ex3.gpr");
+	cout << "Finit, Numerotation..." << endl;
+	TraitementGraphe traiteGraphe(grapheCharge);
+	traiteGraphe.NumeroteGraphe();
+	cout << "Finit !" << endl;
 	cout << *(grapheCharge) << endl;
+
 	system("pause");
 }

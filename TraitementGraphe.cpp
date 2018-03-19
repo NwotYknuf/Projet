@@ -333,28 +333,17 @@ vector<Maillon<Sommet<DonneesSommet>>*> TraitementGraphe::composantesFortementCo
 	return compConnexes;
 }
 
-Sommet<DonneesSommet>* TraitementGraphe::trouverSommetParNom(Maillon<Sommet<DonneesSommet>>*& lSommets, const string& nom) {
-	Sommet<DonneesSommet>* sommetVise = NULL;
-	Maillon<Sommet<DonneesSommet>>* temp = Maillon<Sommet<DonneesSommet>>::copieElement(lSommets);
-	Maillon<Sommet<DonneesSommet>>* temp2 = temp;
-	vector<string> listeNomsSommets;
-	
-	while (temp != NULL) {		
-		listeNomsSommets.push_back(temp->valeur->info.nom);
+Sommet<DonneesSommet>* TraitementGraphe::trouverSommetParNom(Maillon<Sommet<DonneesSommet>>* lSommets, const string& nom) {
+
+	Maillon<Sommet<DonneesSommet>> * temp = lSommets;
+
+	while (temp != NULL) {
+		if (temp->valeur->info.nom == nom)
+			return temp->valeur;
+
 		temp = temp->suivant;
 	}
 
-	int i = 0;
-	for (i; i < listeNomsSommets.size() - 1; i++) {
-		if (listeNomsSommets[i] == listeNomsSommets[i + 1]) throw Erreur("Attention: deux sommets du graphe portent le même nom");
-	}
+	throw Erreur("Aucun sommet ne porte ce nom");
 
-	while (temp2 != NULL) {
-		if (temp2->valeur->info.nom == nom) {
-			sommetVise = temp2->valeur; 
-			break;
-		}
-		temp2 = temp2->suivant;
-	}
-	return sommetVise;
 }

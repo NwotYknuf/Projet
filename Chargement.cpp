@@ -2,7 +2,6 @@
 #include "TraitementGraphe.h"
 #include <fstream>
 
-
 void Chargement::split(string str, string splitBy, vector<string>& tokens)
 {
 	/* Store the original string in the array, so we can loop the rest
@@ -61,7 +60,6 @@ void Chargement::erase(vector<string>& v, string str)
 	}
 }
 
-
 int Chargement::trouverLigneCommencantParS(const string& s, const string& chemin) {
 	bool trouve = false;
 	int numeroLigne = 0;
@@ -80,18 +78,12 @@ int Chargement::trouverLigneCommencantParS(const string& s, const string& chemin
 	return numeroLigne;
 }
 
-
-
-
-
 Graphe<DonneesArete, DonneesSommet> * Chargement::charger(const string& chemin) {
 	Maillon<Sommet<DonneesSommet>>* listeSommets = Chargement::chargerSommetGPR(chemin);
-	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = Chargement::chargerAreteGPR(chemin);
+	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = Chargement::chargerAreteGPR(chemin, listeSommets);
 	Graphe<DonneesArete, DonneesSommet> * graphe = new Graphe<DonneesArete, DonneesSommet>(listeSommets, lAretes);
 	return graphe;
 }
-
-
 
 Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemin) {
 	ifstream file(chemin, ios::in);
@@ -128,9 +120,9 @@ Maillon<Sommet<DonneesSommet>>* Chargement::chargerSommetGPR(const string& chemi
 	return listeSommets;
 }
 
-Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const string& chemin) {
+Maillon<Arete<DonneesArete, DonneesSommet>>* Chargement::chargerAreteGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets) {
 	ifstream file(chemin, ios::in);
-	Maillon<Sommet<DonneesSommet>>* lSommets = Chargement::chargerSommetGPR(chemin);
+	
 	Maillon<Arete<DonneesArete, DonneesSommet>>* lAretes = NULL;
 
 	if (file) {

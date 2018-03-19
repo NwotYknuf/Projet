@@ -12,5 +12,5 @@ public:
 	static int trouverLigneCommencantParS(const string& s, const string& chemin);
 	static void erase(vector<string>& v, string str);
 	static Maillon<Sommet<DonneesSommet>>* chargerSommetGPR(const string& chemin);
-	static Maillon<Arete<DonneesArete, DonneesSommet>>* chargerAreteGPR(const string& chemin);
+	static Maillon<Arete<DonneesArete, DonneesSommet>>* chargerAreteGPR(const string& chemin, Maillon<Sommet<DonneesSommet>>* lSommets);
 };
