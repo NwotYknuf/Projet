@@ -123,7 +123,6 @@ string listeCFCToString(vector<Maillon<Sommet<DonneesSommet>>*> listeCFC) {
 
 }
 
-
 int main2() {
 	
 	Graphe<DonneesArete, DonneesSommet> graphTauro;
@@ -481,6 +480,7 @@ int main() {
 
 			matriceAdj = traiteGraphe->matriceAjdacence(critere);
 			matriceFloyd = traiteGraphe->FloydWarshall(matriceAdj, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
+			afficheMatrice(matriceFloyd, Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets));
 			sauvegarde(matriceToString(matriceFloyd,
 				Maillon<Sommet<DonneesSommet>>::taille(graphe->lSommets)),
 				"Resultats\\matriceFloydWarshall.txt");
